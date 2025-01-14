@@ -131,32 +131,9 @@ $(document).ready(async function () {
 			p5.innerText = '';
 			p5.style = lineStyle
 		  
-			const p6 = document.createElement('p');
-			p6.innerText = '尝试直接提取图片：';
-			p6.style = lineStyle + btnStyle;
-			p6.addEventListener('click',screenShotImg);
-		  
-			  const beginner = document.createElement('p');
-			  beginner.innerHTML = '<label>开始截图时刻：<input id="ZhiYunPPT_shotterBeginTime" value="0:00:00" /></label>'
-		  
-			const timmer = document.createElement('p');
-			timmer.innerHTML = '<label>网络延迟时间（毫秒）：<input id="ZhiYunPPT_networkDelay" value="1000" /></label>'
-			const p7 = document.createElement('p');
-			p7.innerText = '';
-			p7.style = lineStyle
-		  
-			const imgDiv = document.createElement('div');
-		  
 			wrap.appendChild(p1);
 			wrap.appendChild(p2);
 			wrap.appendChild(p3);
-			wrap.appendChild(p4);
-			wrap.appendChild(p5);
-			wrap.appendChild(p6);
-			  wrap.appendChild(beginner);
-			wrap.appendChild(timmer);
-			wrap.appendChild(p7);
-			wrap.appendChild(imgDiv);
 			document.body.appendChild(wrap);
 		  
 			function downloadVideo(){
@@ -171,155 +148,7 @@ $(document).ready(async function () {
 			  document.body.removeChild(vLink);
 		  
 			}
-		  
-			function downloadTimeList(){
-			  const courseName = document.getElementsByClassName("course_name")[0].innerText;
-			  const filename = (courseName?courseName:'ZhiYunPPT')+".txt";
-			  let fileContent = (getPPTTimeList(p5).join("\n")+"\n").replace(/\n*$/,"");
-			  let pptFile = new File([fileContent],filename);
-			  let tLink = document.createElement('a');
-			  tLink.download = filename;
-			  tLink.href = URL.createObjectURL(pptFile);
-			  document.body.appendChild(tLink);
-			  tLink.click();
-			  document.body.removeChild(tLink);
-			}
-		  
-			function screenShotImg(){
-		  
-			  const video = document.getElementById('cmc_player_video');
-			  let timeList = getPPTTimeList(p7);
-			  if(video && timeList.length){
-				let isRunning = true; //表示是否被手动停止
-				this.removeEventListener('click',screenShotImg);this.style.color="#999";
-				const imgWrap = document.createElement('div');
-				imgWrap.style = "width:100vw;height:40vh;background:#fff;z-index:9999;position:fixed;bottom:0;left:0;overflow-y:auto;border-top:solid 2px #008000;"
-				const imgBox = document.createElement('div');
-				imgBox.style = "width:100vw;display:flex;flex-wrap: wrap;";
-				imgBox.id = "ZhiYunPPT_imageBox";
-				imgWrap.appendChild(imgBox);
-				document.body.appendChild(imgWrap);
-				var changeRunningStatu = function(){
-				  isRunning = false;
-				  this.removeEventListener('click',changeRunningStatu);
-				}
-				const stopBtn = document.createElement('p');
-				stopBtn.innerText="停止截图";
-				stopBtn.style = lineStyle + btnStyle;
-				stopBtn.addEventListener('click',changeRunningStatu);
-		  
-				wrap.appendChild(stopBtn);
-		  
-				let networkDelay = document.getElementById('ZhiYunPPT_networkDelay').value;
-				const screenShotGap = parseInt(networkDelay,10)?parseInt(networkDelay,10):1000;
-				const screenShotDelay = parseInt(screenShotGap*0.5);
-		  
-				const videoWidth = video.videoWidth;
-				const videoHeight = video.videoHeight;
-					  let timeBeginShot = document.getElementById('ZhiYunPPT_shotterBeginTime').value;
-					  timeBeginShot = time2second(timeBeginShot);
-					  timeBeginShot=timeBeginShot?timeBeginShot:0;
-				video.pause(); //暂停视频方便截图
-				function screenShotImgStop(){
-				  alert('已经完成截图或被中断');
-				  const downloadAllBtn = document.createElement('p');
-				  downloadAllBtn.innerText = "下载全部";
-				  downloadAllBtn.style = lineStyle + btnStyle;
-				  downloadAllBtn.addEventListener('click',downloadAllImg);
-				  wrap.appendChild(downloadAllBtn);
-				  //下载全部
-				}
-				var getImgShot = function(){
-				  let timeToShot = timeList.shift();
-				  let timeToShotInSec = time2second(timeToShot);
-						  if(timeToShotInSec && timeToShotInSec>=timeBeginShot){
-					createImageShot(video,timeToShotInSec,imgBox,screenShotDelay,videoWidth,videoHeight);
-					if(isRunning && timeList.length){
-					  window.setTimeout(getImgShot, screenShotGap);
-					}else{
-					  screenShotImgStop();
-					}
-				  }else{
-					if(isRunning && timeList.length){
-					  getImgShot();
-					}else{
-					  screenShotImgStop();
-					}
-				  }
-		  
-				}
-				getImgShot();
-		  
-			  }
-			}
-		  
-			function getPPTTimeList(msgDiv){
-			  const pptList = document.getElementsByClassName("ppt_wrap");
-			  msgDiv.innerText = "检测到"+(pptList.length)+"张PPT";
-			  return [...pptList].map(function(wrap){
-				return wrap.getElementsByClassName('ppt_time').length?wrap.getElementsByClassName('ppt_time')[0].innerText:'';
-			  })
-			}
-		  
-			function time2second(time){
-			  if(time && /^\d+:\d+:\d+$/.test(time)){
-				let times = time.split(':').map(function(d){return parseInt(d,10)});
-				let sec = times[0]*3600+times[1]*60+times[2];
-				return(sec);
-			  }else{
-				return false;
-			  }
-			}
-		  
-			function createImageShot(video,timeToShotInSec,imgBox,screenShotDelay,videoWidth,videoHeight){
-			  video.pause();
-		  
-				  if(timeToShotInSec){
-				video.currentTime = timeToShotInSec;
-				let canvas = document.createElement("canvas");
-				canvas.width = videoWidth;
-				canvas.height = videoHeight;
-				window.setTimeout(function(){
-				  canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
-				  let img = document.createElement('img');
-				  img.style="width:8vw;height:auto;margin:5px;";
-				  img.src = canvas.toDataURL('image/png');
-				  img.title="双击删除";
-				  img.addEventListener('dblclick',function(){
-					this.parentElement.removeChild(this);
-				  })
-				  imgBox.appendChild(img);
-				},screenShotDelay)
-			  }
-			}
-		  
-			function downloadAllImg(){
-			  this.removeEventListener('click',downloadAllImg);
-			  const imageBox = document.getElementById('ZhiYunPPT_imageBox');
-			  const imageList = imageBox.getElementsByTagName('img');
-			  let zip = new JSZip();
-			  let imgFolder = zip.folder("images");
-			  let filenameIdx = 0;
-			  const allLength = imageList.length;
-			  for (let i = 0; i < imageList.length; i++) {
-				filenameIdx++;
-				let imgData = imageList[i].src.split(',')[1];
-				imgFolder.file('Img'+Array(5-(''+filenameIdx).length).join(0)+filenameIdx+'.png', imgData, {base64: true});
-				this.innerText = ''+filenameIdx+'/'+allLength;
-			  }
-			  zip.generateAsync({type:"blob"}).then(function(content) {
-				  let ele = document.createElement('a');
-				  ele.download = "Image.zip";
-				  ele.style.display='none';
-				  ele.href = URL.createObjectURL(content);
-				  document.body.appendChild(ele);
-				  ele.click();
-				  document.body.removeChild(ele);
-			  });
-		  
-			}
-		  }
-		  
+
 		  function interactivemetaInit(){
 			const btnStyle = "cursor:pointer;text-decoration:underline;";
 			const lineStyle = "padding:5px 0;";
@@ -338,57 +167,10 @@ $(document).ready(async function () {
 			p3.innerText = '';
 			p3.style = lineStyle
 		  
-			const p6 = document.createElement('p');
-			p6.innerText = '尝试直接提取图片：';
-			p6.style = lineStyle + btnStyle;
-			p6.addEventListener('click',downloadAllImg2);
-		  
-			const p7 = document.createElement('p');
-			p7.innerText = '';
-			p7.style = lineStyle
-		  
-			const imgDiv = document.createElement('div');
-		  
 			wrap.appendChild(p1);
 			wrap.appendChild(p2);
 			wrap.appendChild(p3);
-			wrap.appendChild(p6);
-			wrap.appendChild(p7);
-			wrap.appendChild(imgDiv);
 			document.body.appendChild(wrap);
-		  
-			function getBase64Image(img) {
-			  let canvas = document.createElement("canvas");
-			  canvas.width = img.naturalWidth;
-			  canvas.height = img.naturalHeight;
-			  let ctx = canvas.getContext("2d");
-			  ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-			  let dataURL = canvas.toDataURL("image/png");
-			  return dataURL.replace("data:image/png;base64,", "");
-			}
-		  
-			function downloadAllImg2(){
-			  const imageList = document.getElementById("pane-ppt").getElementsByTagName("img");
-			  let zip = new zip();
-			  let imgFolder = zip.folder("images");
-			  let filenameIdx = 0;
-			  for (let i = 0; i < imageList.length; i++) {
-				filenameIdx++;
-				imageList[i].crossOrigin = "Anonymous";
-				let imgData = getBase64Image(imageList[i]);
-				imgFolder.file('Img'+Array(5-(''+filenameIdx).length).join(0)+filenameIdx+'.png', imgData, {base64: true});
-			  }
-			  zip.generateAsync({type:"blob"}).then(function(content) {
-				  let ele = document.createElement('a');
-				  ele.download = "Image.zip";
-				  ele.style.display='none';
-				  ele.href = URL.createObjectURL(content);
-				  document.body.appendChild(ele);
-				  ele.click();
-				  document.body.removeChild(ele);
-			  });
-		  
-		  }
 		  
 			function downloadVideo2(){
 			  const courseName = '';
@@ -404,8 +186,7 @@ $(document).ready(async function () {
 			}
 		  
 		  }
-		  
-
+		}
 		(function() {
 			const host = new URL(window.location.href).host;
 			if(/classroom\.zju\.edu\.cn/.test(host)){
