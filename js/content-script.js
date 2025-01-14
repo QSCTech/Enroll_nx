@@ -369,7 +369,7 @@ $(document).ready(async function () {
 		  
 			function downloadAllImg2(){
 			  const imageList = document.getElementById("pane-ppt").getElementsByTagName("img");
-			  let zip = new JSZip();
+			  let zip = new zip();
 			  let imgFolder = zip.folder("images");
 			  let filenameIdx = 0;
 			  for (let i = 0; i < imageList.length; i++) {
