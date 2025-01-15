@@ -698,9 +698,6 @@ $(document).ready(async function () {
 		  
 	}
 });
-/*https://classroom.zju.edu.cn/livingroom?course_id=65815&sub_id=1349244&tenant_code=112
-   https://classroom.zju.edu.cn/livingroom?course_id=51714&sub_id=887580&tenant_code=112
-   https://classroom.zju.edu.cn/livingroom?course_id=65815&sub_id=1349244&tenant_code=112*/
   
 //封装chrome.storage.local.get 为promise 这玩意很奇怪...包一层得了
 function getLocalData(key) {
