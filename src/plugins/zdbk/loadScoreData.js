@@ -78,7 +78,7 @@ async function loadScoreData(element, time = 0) {
             //如果评分大于8.5 设置为红色
             if (parseFloat(res.rate) > 8.5) {
               scoreHTML +=
-                '<a style="color:red;" href=https://chalaoshi.buzz/t/' +
+                '<a style="color:red;" href=https://chalaoshi.click/t/' +
                 res.id +
                 ' target="_blank" >' +
                 res.rate +
@@ -87,7 +87,7 @@ async function loadScoreData(element, time = 0) {
             //如果评分小于2 设置为紫色
             else if (parseFloat(res.rate) < 2) {
               scoreHTML +=
-                '<a style="color:#4340ff;" href=https://chalaoshi.buzz/t/' +
+                '<a style="color:#4340ff;" href=https://chalaoshi.click/t/' +
                 res.id +
                 ' target="_blank" >' +
                 res.rate +
@@ -96,14 +96,14 @@ async function loadScoreData(element, time = 0) {
             // 正常情况黑色
             else {
               scoreHTML +=
-                '<a style="color:black;" href=https://chalaoshi.buzz/t/' +
+                '<a style="color:black;" href=https://chalaoshi.click/t/' +
                 res.id +
                 ' target="_blank" >' +
                 res.rate +
                 "</a><br>";
             }
 
-            // scoreHTML += `<a style={color:} href=https://chalaoshi.buzz/t/${res.id}>` + res.rate + '</a> <br>';
+            // scoreHTML += `<a style={color:} href=https://chalaoshi.click/t/${res.id}>` + res.rate + '</a> <br>';
           }
           //如果没有评分
           else {

@@ -3,7 +3,7 @@ import ZhiYun_Index from "./plugins/classroom-downloader/index.js";
 import ZDBK_Main from "./plugins/zdbk/index.js";
 
 $(document).ready(async function () {
-  //如果是查老师的根目录 即url为 chalaoshi.buzz 或者 http://chalaoshi-buzz-s.webvpn.zju.edu.cn:8001/ url需要完全匹配
+  //如果是查老师的根目录 即url为 chalaoshi.click 或者 http://chalaoshi-clickz-s.webvpn.zju.edu.cn:8001/ url需要完全匹配
   if (
     [
       "https://chalaoshi.buzz/",
