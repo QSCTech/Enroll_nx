@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "webpack": "^5.97.1",
+    "webpack": "^5.97.1"
+  },
+  "devDependencies": {
     "webpack-cli": "^6.0.1"
   }
 }

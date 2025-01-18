@@ -30,8 +30,10 @@ $(document).ready(async function () {
   }
   //如果是智云课堂某节课的播放页面，url包含http://classroom.zju.edu.cn/livingroom/course_id=&sub_id=&tenant_code=112
   else if (
-    window.location.href.match(
-      /https:\/\/classroom\.zju\.edu\.cn\/livingroom\?course_id=(\d+)&sub_id=(\d+)&tenant_code=112/
+    window.location.href.includes(
+      "https://classroom.zju.edu.cn/livingpage?"
+    ) || window.location.href.includes(
+      "https://interactivemeta.cmc.zju.edu.cn/"
     )
   ) {
     // NOTE by 5dbwat4:
