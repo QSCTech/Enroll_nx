@@ -19,7 +19,7 @@ $(document).ready(async function () {
     ZDBK_Main();
   }
 
-  //如果是智云课堂同一老师的课程选择页面，url包含https://classroom.zju.edu.cn/coursedetail?course_id=&tenant_code=112
+  //批量下载视频功能：
   else if (
     window.location.href.includes(
       "https://classroom.zju.edu.cn/coursedetail"
@@ -28,12 +28,14 @@ $(document).ready(async function () {
   ) {
     ZhiYun_batch();
   }
-  //如果是智云课堂某节课的播放页面，url包含http://classroom.zju.edu.cn/livingroom/course_id=&sub_id=&tenant_code=112
+  //单独下载视频功能：
   else if (
     window.location.href.includes(
       "https://classroom.zju.edu.cn/livingpage?"
     ) || window.location.href.includes(
       "https://interactivemeta.cmc.zju.edu.cn/"
+    ) ||window.location.href.includes(
+      'https://classroom.zju.edu.cn/livingroom?'
     )
   ) {
     // NOTE by 5dbwat4:

@@ -12,7 +12,6 @@ export default ()=>{
       interactivemetaInit();
     }
 
-    // Your code here...
   })();
 
 }
