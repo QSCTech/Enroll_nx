@@ -15,10 +15,17 @@ export function interactivemetaInit(){
   const wrap=wrap_interactivemeta;
   
 
-  const p1 = p;
-  p1.addEventListener('click',downloadVideo2);
+  
+  const p1=document.createElement("p");
+  p1.style="padding:5px 0;";
+  p1.innerText="请视频开始正常播放后：";
+
+  const p2 = p;
+  p2.innerText="点击下载视频";
+  p2.addEventListener('click',downloadVideo2);
 
   wrap.appendChild(p1);
+  wrap.appendChild(p2);
   document.body.appendChild(wrap);
 
   function downloadVideo2(){
