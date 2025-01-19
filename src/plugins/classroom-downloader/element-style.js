@@ -8,7 +8,6 @@ export const wrap_ZhiYunPPT=document.createElement('div');
     wrap_ZhiYunPPT.style="margin:0;padding:12px;width:125px;height:15vh;position:fixed;top:15%;right:0;background:#fff;z-index:9999;opacity:0.8;border-left:solid 2px #008000;border-bottom:solid 2px #008000;font-size:14px;";
 
 export const p=document.createElement('p');
-    p.innerText = '务必页面下载完成后再点击下载视频';
     p.style = lineStyle + btnStyle;
 
 
