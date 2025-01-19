@@ -17,7 +17,7 @@ export function interactivemetaInit(){
 
   const p1 = p;
   p1.addEventListener('click',downloadVideo2);
-
+  p1.innerText = '务必页面下载完成后再点击下载视频';
   wrap.appendChild(p1);
   document.body.appendChild(wrap);
 
@@ -36,10 +36,16 @@ export function interactivemetaInit(){
 
 export function ZhiYunPPTInit(){
   const wrap=wrap_ZhiYunPPT;
-  const p1 = p;
-  p1.addEventListener('click',downloadVideo);
+  const p1=document.createElement("p");
+  p1.style="padding:5px 0;";
+  p1.innerText="请视频开始正常播放后：";
+
+  const p2 = p;
+  p2.innerText="点击下载视频";
+  p2.addEventListener('click',downloadVideo);
   
   wrap.appendChild(p1);
+  wrap.appendChild(p2);
   document.body.appendChild(wrap);
   
   function downloadVideo(){
