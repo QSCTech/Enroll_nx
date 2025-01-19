@@ -50,7 +50,9 @@
         "https://chalaoshi.buzz/*",
         "http://chalaoshi-buzz-s.webvpn.zju.edu.cn:8001/*",
         "https://classroom.zju.edu.cn/*",
-        "https://interactivemeta.cmc.zju.edu.cn/*"
+        "https://interactivemeta.cmc.zju.edu.cn/*",
+        "https://chalaoshi.de/*",
+        "https://chalaoshi.click/*"
       ]
     }
   ]
