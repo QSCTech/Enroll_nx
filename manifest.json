@@ -2,11 +2,11 @@
   "manifest_version": 3,
   "name": "Enroll_nx",
   "version": "1.0.0",
-  "description": "基于Lazuli开发的浙大一体化插件",
+  "description": "求是潮基于Lazuli开发的浙大一体化插件",
   "author": "QSC",
   "icons": {
-    "48": "icon.png",
-    "128": "icon.png"
+    "48": "enroll-logo.png",
+    "128": "enroll-logo.png"
   },
   "content_scripts": [
     {
@@ -35,7 +35,7 @@
     "storage"
   ],
   "action": {
-    "default_icon": "icon.png",
+    "default_icon": "enroll-logo.png",
     "default_popup": "html/popup.html"
   },
   "content_security_policy": {},
