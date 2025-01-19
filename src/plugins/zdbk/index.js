@@ -96,7 +96,7 @@ export default async ()=> {
           "选课插件提示",
           "评分数据已过期，点击打开查老师页面更新评分",
           20000,
-          "http://chalaoshi.buzz/"
+          "http://chalaoshi.click/"
         );
         //此处暂时不返回 避免影响后续代码执行
         //全局变量 存一个needUpdate 用于判断是否需要更新数据
