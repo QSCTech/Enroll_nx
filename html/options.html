@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Lazuli 设置</title>
+    <title>Enroll_nx 设置</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
         .radio {
@@ -175,24 +175,42 @@
             text-align: center;
             font-size: medium
         }
+
+        #members {
+            font-size: large;
+        }
+
+        .name {
+            font-size: medium;
+            text-align: center;
+
+        }
+
+        #developers {
+            display: flex;
+        }
+
+        .member {
+            margin-top: 10px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 
 <body>
     <div id="option">
         <header>
-            <img src="../icon.png">
+            <img src="../enroll-logo.png" width="40px">
             <span class="space"></span>
             <span class="space"></span>
-            Lazuli 设置
+            Enroll_nx 设置
         </header>
         <div class="content">
-            <label for="general-settings" class="setting-title" >通用设置</label>
+            <label for="general-settings" class="setting-title">通用设置</label>
             <div id="other-settings">
                 <div class="row">
                     <div class="column">
-                        <input type="checkbox" 
-                            class="switch" id="enable-data-expiration-reminders">
+                        <input type="checkbox" class="switch" id="enable-data-expiration-reminders">
                         <span class="space"></span>
                         <label for="select-translate" class="checked-label">启用查老师数据过期更新提醒</label>
                     </div>
@@ -216,14 +234,22 @@
             </div>
         </div>
         <footer>
-            ©2024
+            ©2025
             <a href="" target="_blank">
-                Lazuli
+                Enroll_nx
             </a>
             <span class="space"></span>
             By
-            <a href="https://blog.adsr.me" target="_blank"> ADSR </a>
+            <a href="https://blog.adsr.me" target="_blank"> ADSR </a> and <a href="https://www.qsc.zju.edu.cn/"
+                target="_blank"> QSC </a>
         </footer>
+        <div id="members">求是潮方开发人员</div>
+        <div id='developers'>
+            <div class=member><img class='avatar' src="../assets/atri.jpeg" height='50px'>
+                <div class='name'>1x0</div>
+            </div>
+
+        </div>
     </div>
 
 

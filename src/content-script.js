@@ -39,11 +39,6 @@ $(document).ready(async function () {
       'https://classroom.zju.edu.cn/livingroom?'
     )
   ) {
-    // NOTE by 5dbwat4:
-    // 无法理解的语句... 按照外层if，域名只有可能是classroom.zju.edu.cn
-    // 里面interactivemeta.cmc.zju.edu.cn根本不可能成立
-    // 感觉是复制的时候弄岔了
-    // 总之挪到./plugins/classroom-downloader/index.js里了，写这段代码的人到时候看一下
     ZhiYun_Index();
   }
   else if (
