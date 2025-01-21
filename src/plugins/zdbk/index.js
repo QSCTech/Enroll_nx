@@ -3,10 +3,10 @@ import { bindForgeClick } from "./bindForgeClick.js";
 import { forgePrepareSearch } from "./forgePrepareSearch.js";
 
 let globalConfig = {
-    enableDataExpirationReminders: true,
-  };
+  enableDataExpirationReminders: true,
+};
 
-export default async ()=> {
+export default async () => {
   //设定一个全局变量 数据过期时间
   var expireTime = 1000 * 60 * 60 * 24 * 7; //7天
   console.log("选课插件已启动");
@@ -84,7 +84,9 @@ export default async ()=> {
         );
       }
     }
-  }else if( window.location.href.includes("http://zdbk.zju.edu.cn/jwglxt/xsxk")){
+  } else if (
+    window.location.href.includes("http://zdbk.zju.edu.cn/jwglxt/xsxk")
+  ) {
     let localTime = await getLocalData("search-last-update");
     localTime = localTime["search-last-update"];
     //字符串转数字
@@ -120,7 +122,7 @@ export default async ()=> {
     }
     startZDBKInject();
   }
-}
+};
 
 //封装chrome.storage.local.get 为promise 这玩意很奇怪...包一层得了
 export function getLocalData(key) {

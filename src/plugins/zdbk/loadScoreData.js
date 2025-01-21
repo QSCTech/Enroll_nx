@@ -1,5 +1,4 @@
-export 
-async function loadScoreData(element, time = 0) {
+export async function loadScoreData(element, time = 0) {
   if (time > 10) {
     //此处可能return的情况包括
     //1.zdbk加载超时

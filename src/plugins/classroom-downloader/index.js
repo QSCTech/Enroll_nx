@@ -1,8 +1,7 @@
-import {ZhiYunPPTInit,interactivemetaInit}from "./download.js"
+import { ZhiYunPPTInit, interactivemetaInit } from "./download.js";
 
-export default ()=>{
-
-(function () {
+export default () => {
+  (function () {
     const host = new URL(window.location.href).host;
     if (/classroom\.zju\.edu\.cn/.test(host)) {
       ZhiYunPPTInit();
@@ -11,7 +10,5 @@ export default ()=>{
     if (/interactivemeta\.cmc\.zju\.edu\.cn/.test(host)) {
       interactivemetaInit();
     }
-
   })();
-
-}
+};

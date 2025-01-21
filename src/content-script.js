@@ -31,18 +31,14 @@ $(document).ready(async function () {
   }
   //单独下载视频功能：
   else if (
-    window.location.href.includes(
-      "https://classroom.zju.edu.cn/livingpage?"
-    ) || window.location.href.includes(
-      "https://interactivemeta.cmc.zju.edu.cn/"
-    ) || window.location.href.includes(
-      'https://classroom.zju.edu.cn/livingroom?'
-    )
+    window.location.href.includes("https://classroom.zju.edu.cn/livingpage?") ||
+    window.location.href.includes("https://interactivemeta.cmc.zju.edu.cn/") ||
+    window.location.href.includes("https://classroom.zju.edu.cn/livingroom?")
   ) {
     ZhiYun_Index();
-  }
-  else if (
-    window.location.href.includes('http://zdbk.zju.edu.cn/jwglxt/xsxjc')) {
-      Book_Display();
+  } else if (
+    window.location.href.includes("http://zdbk.zju.edu.cn/jwglxt/xsxjc")
+  ) {
+    Book_Display();
   }
 });

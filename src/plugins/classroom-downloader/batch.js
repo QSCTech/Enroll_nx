@@ -1,8 +1,18 @@
-import { container_batch,header_batch,minimizeButton_batch,downloadButton_batch,
-  status_batch,overallProgressContainer_batch,overallProgressBar_batch,
-  list_batch,listItem_batch,headerDiv_batch,progressContainer_batch,
-  progressBar_batch,infoDiv_batch
- } from "./element-style";
+import {
+  container_batch,
+  header_batch,
+  minimizeButton_batch,
+  downloadButton_batch,
+  status_batch,
+  overallProgressContainer_batch,
+  overallProgressBar_batch,
+  list_batch,
+  listItem_batch,
+  headerDiv_batch,
+  progressContainer_batch,
+  progressBar_batch,
+  infoDiv_batch,
+} from "./element-style";
 export default () => {
   // 获取URL中的参数
   function getQueryVariable(variable) {
@@ -36,10 +46,9 @@ export default () => {
       console.log("正在添加批量下载的用户界面");
       // 创建容器
       const container = container_batch;
-     
+
       // 创建标题和最小化按钮
       const header = header_batch;
-      
 
       const title = document.createElement("div");
       title.style.fontWeight = "bold";
@@ -47,7 +56,7 @@ export default () => {
       header.appendChild(title);
 
       const minimizeButton = minimizeButton_batch;
-    
+
       minimizeButton.addEventListener("click", () => {
         if (container.classList.contains("minimized")) {
           // 恢复窗口
@@ -99,7 +108,6 @@ export default () => {
 
       // 创建下载按钮
       const downloadButton = downloadButton_batch;
-     
 
       downloadButton.addEventListener("mouseover", () => {
         if (!downloadButton.disabled) {

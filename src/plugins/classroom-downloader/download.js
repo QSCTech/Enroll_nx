@@ -1,6 +1,7 @@
-import { wrap_interactivemeta,p,wrap_ZhiYunPPT } from "./element-style";
+import { wrap_interactivemeta, p, wrap_ZhiYunPPT } from "./element-style";
 export function downloadVideo() {
-  const courseName =document.getElementsByClassName("course_name")[0].innerText;
+  const courseName =
+    document.getElementsByClassName("course_name")[0].innerText;
   const videoSrc = document.getElementById("cmc_player_video").src;
   const vLink = document.createElement("a");
   vLink.href = videoSrc;
@@ -11,61 +12,58 @@ export function downloadVideo() {
   document.body.removeChild(vLink);
 }
 
-export function interactivemetaInit(){
-  const wrap=wrap_interactivemeta;
-  
+export function interactivemetaInit() {
+  const wrap = wrap_interactivemeta;
 
-  
-  const p1=document.createElement("p");
-  p1.style="padding:5px 0;";
-  p1.innerText="请视频开始正常播放后：";
+  const p1 = document.createElement("p");
+  p1.style = "padding:5px 0;";
+  p1.innerText = "请视频开始正常播放后：";
 
   const p2 = p;
-  p2.innerText="点击下载视频";
-  p2.addEventListener('click',downloadVideo2);
+  p2.innerText = "点击下载视频";
+  p2.addEventListener("click", downloadVideo2);
 
   wrap.appendChild(p1);
   wrap.appendChild(p2);
   document.body.appendChild(wrap);
 
-  function downloadVideo2(){
-    const courseName = '';
-    const videoSrc = document.getElementById('cmc_player_video').src;
-    const vLink = document.createElement('a');
+  function downloadVideo2() {
+    const courseName = "";
+    const videoSrc = document.getElementById("cmc_player_video").src;
+    const vLink = document.createElement("a");
     vLink.href = videoSrc;
-    vLink.target = '_blank';
-    vLink.download = (courseName?courseName:'ZhiYunPPT');
+    vLink.target = "_blank";
+    vLink.download = courseName ? courseName : "ZhiYunPPT";
     document.body.appendChild(vLink);
     vLink.click();
     document.body.removeChild(vLink);
   }
 }
 
-export function ZhiYunPPTInit(){
-  const wrap=wrap_ZhiYunPPT;
-  const p1=document.createElement("p");
-  p1.style="padding:5px 0;";
-  p1.innerText="请视频开始正常播放后：";
+export function ZhiYunPPTInit() {
+  const wrap = wrap_ZhiYunPPT;
+  const p1 = document.createElement("p");
+  p1.style = "padding:5px 0;";
+  p1.innerText = "请视频开始正常播放后：";
 
   const p2 = p;
-  p2.innerText="点击下载视频";
-  p2.addEventListener('click',downloadVideo);
+  p2.innerText = "点击下载视频";
+  p2.addEventListener("click", downloadVideo);
 
-  
   wrap.appendChild(p1);
   wrap.appendChild(p2);
   document.body.appendChild(wrap);
-  
-  function downloadVideo(){
-    const courseName = document.getElementsByClassName("course_name")[0].innerText;
-    const videoSrc = document.getElementById('cmc_player_video').src;
-    const vLink = document.createElement('a');
+
+  function downloadVideo() {
+    const courseName =
+      document.getElementsByClassName("course_name")[0].innerText;
+    const videoSrc = document.getElementById("cmc_player_video").src;
+    const vLink = document.createElement("a");
     vLink.href = videoSrc;
-    vLink.target = '_blank';
-    vLink.download = (courseName?courseName:'ZhiYunPPT');
+    vLink.target = "_blank";
+    vLink.download = courseName ? courseName : "ZhiYunPPT";
     document.body.appendChild(vLink);
     vLink.click();
     document.body.removeChild(vLink);
-  
   }
 }
