@@ -1,6 +1,7 @@
 import { autoScroll } from "./autoScroll.js";
 import { bindForgeClick } from "./bindForgeClick.js";
 import { forgePrepareSearch } from "./forgePrepareSearch.js";
+import { lessonTableMatch } from "./lessonTableMatch.js"
 
 let globalConfig = {
   enableDataExpirationReminders: true,
@@ -298,3 +299,5 @@ function desktop_notification(title, data, closeTime = 3000, url = "") {
     }
   );
 }
+
+window.onload = lessonTableMatch;

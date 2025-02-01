@@ -15,7 +15,7 @@ module.exports = {
     filename: '[name].js', // Use [name] to differentiate output files for each entry point
     clean: true, // Clean the output directory before emitting new files
   },
-
+  mode: 'production'
   // Module rules for handling different file types
 //   module: {
 //     rules: [
