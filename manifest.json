@@ -22,8 +22,13 @@
         "https://interactivemeta.cmc.zju.edu.cn/*",
         "https://courses.zju.edu.cn/*"
       ],
-      "js": ["lib/js/jquery.min.js", "js/content-script.js"],
-      "css": ["lib/css/inject.css"],
+      "js": [
+        "lib/js/jquery.min.js",
+        "js/content-script.js"
+      ],
+      "css": [
+        "lib/css/inject.css"
+      ],
       "run_at": "document_end"
     }
   ],
@@ -39,13 +44,19 @@
     "default_icon": "enroll-logo.png",
     "default_popup": "html/popup.html"
   },
-  "content_security_policy": {},
+"content_security_policy": {
+  "extension_pages": "script-src 'self';object-src 'self'"
+},
   "externally_connectable": {
-    "matches": ["*://zdbk.zju.edu.cn/*"]
+    "matches": [
+      "*://zdbk.zju.edu.cn/*"
+    ]
   },
   "web_accessible_resources": [
     {
-      "resources": ["data/default.json"],
+      "resources": [
+        "data/default.json"
+      ],
       "matches": [
         "http://zdbk.zju.edu.cn/*",
         "https://chalaoshi.buzz/*",
