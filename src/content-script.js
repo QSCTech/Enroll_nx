@@ -2,7 +2,7 @@
 import ZhiYun_Index from "./plugins/classroom-downloader/index.js";
 import ZDBK_Main from "./plugins/zdbk/index.js";
 import Book_Display from "./plugins/zdbk/bookDisplay.js";
-
+import Courses_Index from "./plugins/courses/index.js"
 $(document).ready(async function () {
   //如果是查老师的根目录 即url为 chalaoshi.click 或者 http://chalaoshi-clickz-s.webvpn.zju.edu.cn:8001/ url需要完全匹配
   if (
@@ -20,7 +20,7 @@ $(document).ready(async function () {
     ZDBK_Main();
   }
 
-  //批量下载视频功能：
+  //智云课堂批量下载视频功能：
   else if (
     window.location.href.includes(
       "https://classroom.zju.edu.cn/coursedetail"
@@ -29,7 +29,7 @@ $(document).ready(async function () {
   ) {
     ZhiYun_batch();
   }
-  //单独下载视频功能：
+  //智云课堂单独下载视频功能：
   else if (
     window.location.href.includes("https://classroom.zju.edu.cn/livingpage?") ||
     window.location.href.includes("https://interactivemeta.cmc.zju.edu.cn/") ||
@@ -40,5 +40,12 @@ $(document).ready(async function () {
     window.location.href.includes("http://zdbk.zju.edu.cn/jwglxt/xsxjc")
   ) {
     Book_Display();
+  }
+  //学在浙大只可查看的课件下载、教务网补选显示老师等功能：
+  else if(
+    window.location.href.includes("http://zdbk.zju.edu.cn")||
+    window.location.href.includes("https://courses.zju.edu.cn")
+  ){
+    Courses_Index();
   }
 });
