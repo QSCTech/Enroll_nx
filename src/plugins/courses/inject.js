@@ -27,7 +27,13 @@
                     var iEle = globalDocument.createElement('i')
                     iEle.className = 'font font-download'
                     aEle.appendChild(iEle)
-                    header.insertBefore(aEle, closeBtn)
+                    const reminder=globalDocument.createElement('em');
+                    reminder.innerText='点击下载pdf，不能下载ppt';
+                    reminder.style.color='red';
+                    reminder.style.position='relative';
+                    reminder.style.left='800px';
+                    header.insertBefore(aEle, closeBtn);
+                    header.insertBefore(reminder, aEle);
                 } else {
                     if (confirm('Do you want to download this file?')) {
                         downloadURL(url)
