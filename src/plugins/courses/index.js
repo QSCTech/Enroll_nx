@@ -8,7 +8,6 @@ const webxConfig = {
     }
 }
 
-
 export default () => {
     (function () {
         'use strict';
@@ -25,32 +24,17 @@ export default () => {
             }
         }
         else if (curURL.hostname === 'courses.zju.edu.cn') {
-            if (curPath === '/note-bene/pdf-viewer') {
-                courses.courses_download_pdf();
-            } else if (curPath === '/user/index') {
-                // 立即请求 /api/todos 数据
-                courses.fetchTodoData();
-                // 持续观察待办事项 DOM 变化并应用 API 数据
-                courses.observeTodoList();
-            } else {
-                // 处理学在浙大相关功能页面的路由
-                let curHandled = false;
-                let routing = curURL.pathname.split('/')[3];
-                if (routing === 'learning-activity') {
-                    let ret = courses.courses_download_video();
-                    if (ret !== false) curHandled = true;
-                }
-                if (curPath.includes("content")) {
-                    courses.courses_download_pdf();
-                }
-                if (webxConfig.runAsBookmark) {
-                    let ret = courses.courses_download_pdf();
-                    if (ret !== false) curHandled = true; // 找到PDF，URL handled
-                }
-                if (!curHandled) urlHandled = false;
-                courses.courses_download_btn_cleaner();
+            courses.fetchTodoData();
+            courses.observeTodoList();
+            function injectScript() {
+                const script = document.createElement('script');
+                script.src = chrome.runtime.getURL('src/plugins/courses/inject.js');
+                document.head.appendChild(script);
             }
-        } else {
+            
+            injectScript();
+        }
+        else {
             urlHandled = false;
         }
         

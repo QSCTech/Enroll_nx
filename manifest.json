@@ -25,6 +25,7 @@
       "js": [
         "lib/js/jquery.min.js",
         "js/content-script.js"
+        
       ],
       "css": [
         "lib/css/inject.css"
@@ -38,7 +39,9 @@
   "options_page": "html/options.html",
   "permissions": [
     "notifications",
-    "storage"
+    "storage",
+    "activeTab",
+    "scripting"
   ],
   "action": {
     "default_icon": "enroll-logo.png",
@@ -55,7 +58,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "data/default.json"
+        "data/default.json",
+        "src/plugins/courses/inject.js"
       ],
       "matches": [
         "http://zdbk.zju.edu.cn/*",
@@ -64,7 +68,8 @@
         "https://classroom.zju.edu.cn/*",
         "https://interactivemeta.cmc.zju.edu.cn/*",
         "https://chalaoshi.de/*",
-        "https://chalaoshi.click/*"
+        "https://chalaoshi.click/*",
+        "https://courses.zju.edu.cn/*"
       ]
     }
   ]

@@ -1,5 +1,5 @@
 
-//----------------zdbk教学信息服务平台-----------------------
+//zdbk补选显示教师功能
 import {set_download_btn,extract_filename,wait_element,insert_after,watch} from "./utilties"
 const webxConfig = {
     runAsBookmark:false,
