@@ -1,12 +1,10 @@
 //在上方表格中点击获取相应时间
 //通过比较时间获取课程代码
-//实在没有想到更便捷的办法，只能穷举了
-//我觉得肯定有简便写法，可是我真的没想到（QAQ）
+//xskcdm:学生课程代码
 //需要优化：
 // 同一课程点击两次出现类似没有渲染，再点击恢复正常（好怪？）
 export async function lessonTableMatch() {
-    let getTime;//得到课程时间
-    //新建展示模块
+    // 新建展示模块
     const copyy = document.createElement("div");
     const firstNode = document.getElementsByClassName('outer_xkxx_list')[0];
     if (firstNode) {
@@ -17,128 +15,147 @@ export async function lessonTableMatch() {
     }
     copyy.setAttribute('class', 'outer_xkxx_list');
     copyy.style.backgroundColor = 'lightyellow';
-    //放了个不一样的背景颜色易于区分，目前是淡黄色，可以请产品的同学看看什么颜色最合适
-    //匹配时间得到课程代码
-    function renew() {
-        let xskcChoose;
+
+    // 匹配时间得到课程代码
+    function renew(timeNumber, semester, prefix) {
+        //let time = `${dayMap[prefix]}第${timeNumber}`;
+        const xskcChooseArray = [];
+        let xskcChooseElement;
         const xskcdm1 = document.getElementsByClassName('list-group-item');
         for (let i = 0; i < xskcdm1.length; i++) {
-            let nameCompare1 = xskcdm1[i].getAttribute('data-sksj');
-            if (getTime) {
-                if (nameCompare1.includes(getTime)) {
-                    xskcChoose = xskcdm1[i].getAttribute('data-xkkh').split('-')[3];
-                    break;
+            let timeString = xskcdm1[i].getAttribute('data-sksj');
+            const regex = new RegExp(`^(.*)(${dayMap[prefix]})([^节]*)(第|,)(${timeNumber})(节|,)(.*)$`);
+            const match = timeString.match(regex);
+            //console.log(match);
+            let semesterCompare = xskcdm1[i].getAttribute('data-xxq');
+            if (match) {
+                if (semesterCompare.length === 2 || semester === semesterCompare) {
+                    xskcChooseElement = xskcdm1[i].getAttribute('data-xkkh').split('-')[3];
+                    xskcChooseArray.push(xskcChooseElement);
                 }
             }
         }
+
+
         //匹配复制到新模块
         const xskcdm2 = document.getElementsByClassName('outer_xkxx_list');
-        for (let i = 0; i < xskcdm2.length; i++) {
-            let nameCompare2 = xskcdm2[i].getAttribute('data-xskcdm');
-            if (xskcChoose && nameCompare2) {
-                if (nameCompare2.includes(xskcChoose)) {
-                    let getNode = document.querySelector(`[data-xskcdm="${nameCompare2}"]`);
-                    if (getNode) {
-                        let newContent = getNode.cloneNode(true); 
-                        copyy.innerHTML = ""; 
-                        copyy.appendChild(newContent);
+        if (xskcChooseArray.length) {
+            for (let j = 0; j < xskcChooseArray.length; j++) {
+                let xskcChoose = xskcChooseArray[j];
+                for (let i = 1; i < xskcdm2.length; i++) {
+                    let nameCompare2 = xskcdm2[i].getAttribute('data-xskcdm');
+                    if (nameCompare2) {
+                        if (nameCompare2.includes(xskcChoose)) {
+
+                            let getNode = document.querySelector('.outer_xkxx_list[data-xskcdm="' + nameCompare2 + '"]');
+                            if (getNode) {
+                                let newContent = getNode.cloneNode(true);
+                                //copyy.innerHTML = "";
+                                copyy.appendChild(newContent);
+                            }
+                            break;
+
+                        }
                     }
-                    break;
                 }
             }
         }
     }
-    //以下为对于课表的信息获取
+    // 以下为对于课表的信息获取
+    const dayMap = {
+        '1_': '周一',
+        '2_': '周二',
+        '3_': '周三',
+        '4_': '周四',
+        '5_': '周五',
+        '6_': '周六',
+        '7_': '周日'
+    };
 
+    // 合并所有点击事件处理
     document.body.addEventListener("click", function (event) {
-        if (event.target.matches("[id^='1_']")) {
-            let slot = event.target.id;
-            let timeNumber = slot.split('_')[1];
-            if (timeNumber === '7') {
-                if (document.getElementById(`${slot[0]}_6`).innerHTML) {
-                    timeNumber = '6';
+        copyy.innerHTML = "";
+
+
+        if (event.target.closest(".outer_left")||event.target.matches('[data-toggle="tab"]')) {
+            console.log('a')
+            const regex = /^\d+_\d+$/; // 定义正则表达式
+
+            let matchingElements = []
+
+
+            const checkInterval = setInterval(() => {
+                if (matchingElements.length > 0) {
+                    clearInterval(checkInterval); // 停止等待
+                    console.log(matchingElements);
+                    for (let element of matchingElements) {
+                        // 获取元素的纯文本内容
+                        const text = element.textContent;
+
+                        // 创建一个新的 <a> 标签
+                        const link = document.createElement('a');
+                        link.textContent = text; // 设置链接的文本内容
+                        link.href = "#"; // 设置链接的目标地址
+                        link.className = 'link';
+
+                        // 清空原元素内容并添加链接
+                        element.innerHTML = ""; // 清空原元素内容
+                        element.appendChild(link); // 将链接添加到原元素中
+                    }
+                } else {
+                    console.log("Still waiting...");
+                    // 过滤出符合正则表达式的元素
+                    const allElementsWithId = document.querySelectorAll("[id]");
+                    matchingElements = Array.from(allElementsWithId).filter(element => {
+                        return regex.test(element.id);
+                    });
                 }
-            }
-            getTime = `周一第${timeNumber}`;
-            renew();
+            }, 70);
+
+
         }
-    });
-    document.body.addEventListener("click", function (event) {
-        if (event.target.matches("[id^='2_']")) {
-            let slot = event.target.id;
-            let timeNumber = slot.split('_')[1];
-            if (timeNumber === '7') {
-                if (document.getElementById(`${slot[0]}_6`).innerHTML) {
-                    timeNumber = '6';
+
+
+
+        for (let prefix in dayMap) {
+            if (event.target.matches(`[id^='${prefix}']`)) {
+                let slot = event.target.id;
+                let timeNumber = slot.split('_')[1];
+
+                let getSemester;
+                let tab = document.querySelector('[aria-expanded="true"]');
+                if (tab) {
+                    getSemester = tab.getAttribute('data-xxq');
                 }
-            }
-            getTime = `周二第${timeNumber}`;
-            renew();
-        }
-    });
-    document.body.addEventListener("click", function (event) {
-        if (event.target.matches("[id^='3_']")) {
-            let slot = event.target.id;
-            let timeNumber = slot.split('_')[1];
-            if (timeNumber === '7') {
-                if (document.getElementById(`${slot[0]}_6`).innerHTML) {
-                    timeNumber = '6';
+                else {
+                    const tabs = document.querySelectorAll('[data-toggle="tab"]');
+                    tab = Array.from(tabs).find(element => element.innerHTML.includes('课表'));
+                    getSemester = tab.getAttribute('data-xxq');
                 }
+                renew(timeNumber, getSemester, prefix);
             }
-            getTime = `周三第${timeNumber}`;
-            renew();
-        }
-    });
-    document.body.addEventListener("click", function (event) {
-        if (event.target.matches("[id^='4_']")) {
-            let slot = event.target.id;
-            let timeNumber = slot.split('_')[1];
-            if (timeNumber === '7') {
-                if (document.getElementById(`${slot[0]}_6`).innerHTML) {
-                    timeNumber = '6';
+            else if (event.target.parentNode.matches(`[id^='${prefix}']`)) {
+                let slot = event.target.parentNode.id;
+                console.log(slot);
+                let timeNumber = slot.split('_')[1];
+
+                let getSemester;
+                let tab = document.querySelector('[aria-expanded="true"]');
+                if (tab) {
+                    getSemester = tab.getAttribute('data-xxq');
                 }
-            }
-            getTime = `周四第${timeNumber}`;
-            renew();
-        }
-    });
-    document.body.addEventListener("click", function (event) {
-        if (event.target.matches("[id^='5_']")) {
-            let slot = event.target.id;
-            let timeNumber = slot.split('_')[1];
-            if (timeNumber === '7') {
-                if (document.getElementById(`${slot[0]}_6`).innerHTML) {
-                    timeNumber = '6';
+                else {
+                    const tabs = document.querySelectorAll('[data-toggle="tab"]');
+                    tab = Array.from(tabs).find(element => element.innerHTML.includes('课表'));
+                    getSemester = tab.getAttribute('data-xxq');
                 }
-            }
-            getTime = `周五第${timeNumber}`;
-            renew();
+                renew(timeNumber, getSemester, prefix);
+            };
         }
-    });
-    document.body.addEventListener("click", function (event) {
-        if (event.target.matches("[id^='6_']")) {
-            let slot = event.target.id;
-            let timeNumber = slot.split('_')[1];
-            if (timeNumber === '7') {
-                if (document.getElementById(`${slot[0]}_6`).innerHTML) {
-                    timeNumber = '6';
-                }
-            }
-            getTime = `周六第${timeNumber}`;
-            renew();
-        }
-    });
-    document.body.addEventListener("click", function (event) {
-        if (event.target.matches("[id^='7_']")) {
-            let slot = event.target.id;
-            let timeNumber = slot.split('_')[1];
-            if (timeNumber === '7') {
-                if (document.getElementById(`${slot[0]}_6`).innerHTML) {
-                    timeNumber = '6';
-                }
-            }
-            getTime = `周日第${timeNumber}`;
-            renew();
-        }
-    });
+
+    }, true);
+
+
 }
+
+
