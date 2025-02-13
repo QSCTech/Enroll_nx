@@ -110,7 +110,7 @@ export async function lessonTableMatch() {
                         return regex.test(element.id);
                     });
                 }
-            }, 70);
+            }, 100);
 
 
         }
