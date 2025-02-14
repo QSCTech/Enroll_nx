@@ -14,7 +14,12 @@
                     console.log('no src, skip')
                     return
                 }
+                console.log(src);
                 var url = decodeURIComponent(src.substr(src.indexOf('http')))
+                console.log(url);
+                if(!url.includes('http')){
+                    url=src;
+                }
                 var header = globalDocument.querySelector('.header.clearfix')
                 if (header) {
                     console.log('内页展示')
@@ -23,17 +28,12 @@
                     aEle.style.position = 'absolute'
                     aEle.style.top = '14px'
                     aEle.style.right = '200px'
+                    aEle.target='_blank';
                     aEle.href = url
                     var iEle = globalDocument.createElement('i')
                     iEle.className = 'font font-download'
-                    aEle.appendChild(iEle)
-                    const reminder=globalDocument.createElement('em');
-                    reminder.innerText='点击下载pdf，不能下载ppt';
-                    reminder.style.color='red';
-                    reminder.style.position='relative';
-                    reminder.style.left='800px';
+                    aEle.appendChild(iEle);
                     header.insertBefore(aEle, closeBtn);
-                    header.insertBefore(reminder, aEle);
                 } else {
                     if (confirm('Do you want to download this file?')) {
                         downloadURL(url)

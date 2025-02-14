@@ -175,20 +175,38 @@
 
       #members {
         font-size: large;
-      }
-
-      .name {
-        font-size: medium;
         text-align: center;
       }
-
       #developers {
         display: flex;
+        text-align: center;
       }
-
+        /* 图片和词组容器 */
       .member {
+        display: flex; /* 水平排列 */
+        justify-content: center; /* 内容居中 */
+        gap: 20px; /* 图片和词组之间的间距 */
+        flex-wrap: wrap; /* 如果内容过多，自动换行 */
         margin-top: 10px;
         margin-left: 10px;
+      }
+
+        /* 图片样式 */
+      .avatar {
+        width: 50px; /* 图片宽度 */
+        height: 50px; /* 图片高度 */
+        border-radius: 50%; /* 圆形图片 */
+        object-fit: cover; /* 保持图片比例 */
+        display: block; /* 防止图片下方有空白 */
+      }
+
+        /* 词组样式 */
+      .name {
+        display: block; /* 每个词组单独一行 */
+        width: 50px; /* 与图片宽度一致 */
+        text-align: center; /* 文字居中 */
+        margin-top: 10px; /* 词组与图片的间距 */
+        font-size: medium; /* 字体大小 */
       }
     </style>
   </head>
@@ -245,10 +263,17 @@
       </footer>
       <div id="members">求是潮方开发人员</div>
       <div id="developers">
-        <div class="member">
-          <img class="avatar" src="../assets/atri.jpeg" height="50px" />
-          <div class="name">1x0</div>
-        </div>
+          <div class="member">
+              <div class="member-item">
+                  <img class="avatar" src="../assets/atri.jpeg" alt="1x0">
+                  <span class="name">1x0</span>
+              </div>
+              <div class="member-item">
+                  <img class="avatar" src="../assets/luckySnow.jpg" alt="瑞雪">
+                  <span class="name">瑞雪</span>
+              </div>
+              <!-- 可以继续添加更多成员 -->
+          </div>
       </div>
     </div>
 
