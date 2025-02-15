@@ -76,10 +76,8 @@ export async function lessonTableMatch() {
 
     // 合并所有点击事件处理
     document.body.addEventListener("click", function (event) {
-        copyy.innerHTML = "";
 
-
-        if (event.target.closest(".outer_left") || event.target.matches('[data-toggle="tab"]')) {
+        if (event.target.closest(".outer_left") || (event.target.matches('[data-xxq]') && event.target.matches('[role="tab"]'))) {
             const regex = /^\d+_\d+$/; // 定义正则表达式
 
             let matchingElements = [];
@@ -96,7 +94,7 @@ export async function lessonTableMatch() {
                         // 创建一个新的 <a> 标签
                         const link = document.createElement('a');
                         link.innerHTML = text; // 设置链接的文本内容
-                        link.href = "#"; // 设置链接的目标地址
+                        link.href = "javascript:void(0);"; // 设置链接的目标地址
                         link.className = 'link';
 
                         // 清空原元素内容并添加链接
@@ -119,25 +117,29 @@ export async function lessonTableMatch() {
 
 
         for (let prefix in dayMap) {
+            let slot;
             if (event.target.matches(`[id^='${prefix}']`)) {
-                let slot = event.target.id;
-                let timeNumber = slot.split('_')[1];
-                const semester = matchSemester();
-                renew(timeNumber, semester, prefix);
+                copyy.innerHTML = "";
+                slot = event.target.id;
             }
             else if (event.target.parentNode.parentNode.matches(`[id^='${prefix}']`)) {
-                let slot = event.target.parentNode.parentNode.id;
-                let timeNumber = slot.split('_')[1];
-                const semester = matchSemester();
-                renew(timeNumber, semester, prefix);
-            };
+                copyy.innerHTML = "";
+                slot = event.target.parentNode.parentNode.id;
+            }
+            else{
+                continue;
+            }
+            let timeNumber = slot.split('_')[1];
+            const semester = matchSemester();
+            console.log(semester);
+            renew(timeNumber, semester, prefix);
         }
 
     }, true);
 
     function matchSemester() {
         let getSemester;
-        let tab = document.querySelector('[aria-expanded="true"]');
+        let tab = document.querySelector('[data-xxq][aria-expanded="true"]');
         if (tab) {
             getSemester = tab.getAttribute('data-xxq');
         }
