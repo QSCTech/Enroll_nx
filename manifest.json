@@ -5,8 +5,8 @@
   "description": "求是潮基于Lazuli开发的浙大一体化插件",
   "author": "QSC",
   "icons": {
-    "48": "enroll-logo.png",
-    "128": "enroll-logo.png"
+    "48": "icon.png",
+    "128": "icon.png"
   },
   "content_scripts": [
     {
@@ -44,7 +44,7 @@
     "scripting"
   ],
   "action": {
-    "default_icon": "enroll-logo.png",
+    "default_icon": "icon.png",
     "default_popup": "html/popup.html"
   },
 "content_security_policy": {
