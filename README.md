@@ -18,7 +18,7 @@
 
 # 教务网功能
 ## 1.补选显示老师名字
-待补充
+![](./assets/course.png)
 ## 2.教材预定显示信息
 ![](./assets/zdbk_books_img.png)
 ### 3.选课界面优化
