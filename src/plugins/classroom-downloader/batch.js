@@ -141,6 +141,7 @@ export default () => {
 
         const headerDiv = headerDiv_batch;
 
+        
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.value = video.originalIndex; // 保存视频在原始数组中的索引
@@ -172,6 +173,13 @@ export default () => {
         listItem.appendChild(infoDiv);
 
         list.appendChild(listItem);
+        //保存DOM引用用作索引
+        video.domRef={
+          listItem,
+          progressBar,
+          infoDiv
+        }
+        console.log(video);
       });
 
       document.body.appendChild(container);
@@ -191,6 +199,8 @@ export default () => {
       downloadButton.addEventListener("click", function () {
         console.log("下载按钮被点击");
         status.innerText = "开始下载...";
+        selectAllCheckbox.disabled=true;
+        console.log("selectAllCheckbox全选复选框已被禁止点击");
         const checkboxes = container.querySelectorAll(".videoCheckbox");
         const selectedVideos = [];
         checkboxes.forEach((cb) => {
@@ -198,10 +208,12 @@ export default () => {
             const videoIndex = parseInt(cb.value);
             selectedVideos.push({
               video: videos[videoIndex],
-              index: videoIndex,
+              index: videos[videoIndex].domRef
             });
           }
+          cb.disabled=true;
         });
+        console.log("checkboxes复选框已全部被禁止点击");
 
         if (selectedVideos.length === 0) {
           alert("请选择要下载的视频");
@@ -231,21 +243,24 @@ export default () => {
         overallProgressBar.style.width = "0%";
         console.log("显示整体进度条");
 
-        // 开始下载
         let currentDownload = 0;
         let completed = 0;
 
         function downloadNext() {
           if (currentDownload < selectedVideos.length) {
             const videoObj = selectedVideos[currentDownload];
+            console.log(videoObj);
             const video = videoObj.video;
-            const videoIndex = videoObj.index;
-            const listItem = list.children[videoIndex];
-            const progressContainer =
-              listItem.querySelector("div:nth-child(2)");
-            const progressBar = progressContainer.querySelector("div");
-            const infoDiv = listItem.querySelector("div:nth-child(3)");
-
+            console.log(video);
+            const { listItem, progressBar, infoDiv } = video.domRef;
+            console.log(videoObj.dom);
+            const progressContainer =listItem.querySelector("div:nth-child(2)");
+            if (!listItem || !progressBar || !infoDiv) {
+              console.error(`错误：未找到listItem。`);
+              currentDownload++;  // 跳过当前下载
+              downloadNext(); // 继续下载下一个
+              return;  // 如果找不到 listItem，就跳过
+            }
             status.innerText = `正在下载 (${currentDownload + 1}/${
               selectedVideos.length
             }): ${video.title}`;
@@ -335,9 +350,10 @@ export default () => {
               console.log(`整体进度: ${progress}%`);
 
               currentDownload++;
+              console.log('currentDownload is ${currentDownload}');
               // 触发下一个下载
-              setTimeout(downloadNext, 1000); // 1秒延迟
-            };
+              downloadNext();
+            }
 
             // 监听错误
             xhr.onerror = function () {
@@ -374,12 +390,18 @@ export default () => {
               console.log("隐藏整体进度条");
             }, 5000);
 
-            // 恢复下载按钮
+            // 恢复下载按钮和复选框
             downloadButton.disabled = false;
             downloadButton.innerText = "下载选中视频";
             downloadButton.style.backgroundColor = "#4CAF50";
             downloadButton.style.cursor = "pointer";
             console.log("恢复下载按钮状态");
+
+            const checkboxes = container.querySelectorAll(".videoCheckbox");
+            checkboxes.forEach((cb) => {
+              cb.disabled=false;
+            });
+            selectAllCheckbox.disabled=false;
           }
         }
 
