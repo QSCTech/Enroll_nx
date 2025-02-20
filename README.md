@@ -24,3 +24,7 @@
 ### 3.选课界面优化
 点击课程表中某课程名称可以便捷在下方进行操作
 ![](./assets/Lesson.png)
+
+
+1.无法使用chrome.runtime 与登录有关  存储不成功
+与inject.js有关
