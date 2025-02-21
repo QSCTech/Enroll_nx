@@ -83,7 +83,7 @@ export default ()=>{
                         aEle.style.position = 'absolute'
                         aEle.style.top = '14px'
                         aEle.style.right = '200px'
-                        aEle.id='downloadingButton';
+                        aEle.id='downloadButton';
                         aEle.href = url;
                         var iEle = globalDocument.createElement('i')
                         iEle.className = 'font font-download'
@@ -94,6 +94,11 @@ export default ()=>{
                             downloadURL(url);
                         }
                     }
+            }
+            function clean_btn() {
+                let btn = document.getElementsById('downloadButton');
+                if (btn) btn.remove();
+                console.log('btn killed');
             }
         }
         if (document.readyState === 'loading') {
