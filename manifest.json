@@ -64,8 +64,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "data/default.json",
-        "src/plugins/courses/inject.js"
+        "data/default.json"
       ],
       "matches": [
         "http://zdbk.zju.edu.cn/*",

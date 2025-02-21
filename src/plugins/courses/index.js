@@ -1,6 +1,6 @@
 import { zdbk_xsbtx } from "./zdbk.js"
-import * as courses from "./courses.js"
-import downloadpdf from "./inject.js";
+import * as courses from "./todos.js"
+import downloadpdf from "./pdfDownloading.js";
 const webxConfig = {
     runAsBookmark: false,
     theme: {//一些主题颜色设置

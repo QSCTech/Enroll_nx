@@ -1,6 +1,11 @@
 
 //zdbk补选显示教师功能
-import {set_download_btn,extract_filename,wait_element,insert_after,watch} from "./utilties"
+import {
+set_download_btn,
+extract_filename,
+wait_element,
+insert_after,watch
+}from "./utilties"
 const webxConfig = {
     runAsBookmark:false,
     theme :{//一些主题颜色设置

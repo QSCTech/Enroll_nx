@@ -10,7 +10,6 @@ export default ()=>{
                 var pdfViewer = globalDocument.querySelector('#pdf-viewer')
                 if (pdfViewer) {
                     console.log('已检测到PDF Viewer');
-                    
                     var src = pdfViewer.getAttribute('src')
                     if (!src) {
                         console.log('no src, skip')
@@ -19,29 +18,11 @@ export default ()=>{
                     console.log(src);
                     var url = decodeURIComponent(src.substr(src.indexOf('http')))
                     console.log(url);
-                    if (!url.includes('http')) {
+                    if (!url.includes('http') || !url.includes('https')) {
                         downloadPPT();
                     }
                     else{
-                        var header = globalDocument.querySelector('.header.clearfix')
-                        if (header) {
-                            console.log('内页展示')
-                            var closeBtn = globalDocument.querySelectorAll('.right.close')[1]
-                            var aEle = globalDocument.createElement('a')
-                            aEle.style.position = 'absolute'
-                            aEle.style.top = '14px'
-                            aEle.style.right = '200px'
-                            aEle.id='downloadingButton';
-                            aEle.href = url
-                            var iEle = globalDocument.createElement('i')
-                            iEle.className = 'font font-download'
-                            aEle.appendChild(iEle);
-                            header.insertBefore(aEle, closeBtn);
-                        } else {
-                            if (confirm('Do you want to download this file?')) {
-                                downloadURL(url)
-                            }
-                        }
+                        addDownloadButton(url);
                     }
                     observer.disconnect();
                 } else {
@@ -88,7 +69,13 @@ export default ()=>{
                 try {
                     const pptUrl = await getPPTUrl();
                     console.log(pptUrl);
-                    var header = globalDocument.querySelector('.header.clearfix')
+                    addDownloadButton(pptUrl);
+                  } catch (error) {
+                    console.error("获取PPT URL失败:", error);
+                  }
+            }
+            function addDownloadButton(url){
+                var header = globalDocument.querySelector('.header.clearfix')
                     if (header) {
                         console.log('内页展示')
                         var closeBtn = globalDocument.querySelectorAll('.right.close')[1]
@@ -97,19 +84,16 @@ export default ()=>{
                         aEle.style.top = '14px'
                         aEle.style.right = '200px'
                         aEle.id='downloadingButton';
-                        aEle.href = pptUrl;
+                        aEle.href = url;
                         var iEle = globalDocument.createElement('i')
                         iEle.className = 'font font-download'
                         aEle.appendChild(iEle);
                         header.insertBefore(aEle, closeBtn);
                     } else {
                         if (confirm('Do you want to download this file?')) {
-                            downloadURL(pptUrl);
+                            downloadURL(url);
                         }
                     }
-                  } catch (error) {
-                    console.error("获取PPT URL失败:", error);
-                  }
             }
         }
         if (document.readyState === 'loading') {
@@ -122,3 +106,4 @@ export default ()=>{
     
     })();
 }
+//下载完成后url不变，必须刷新。自动清楚更新url实现。
