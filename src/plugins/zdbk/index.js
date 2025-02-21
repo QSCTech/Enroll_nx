@@ -2,6 +2,7 @@ import { autoScroll } from "./autoScroll.js";
 import { bindForgeClick } from "./bindForgeClick.js";
 import { forgePrepareSearch } from "./forgePrepareSearch.js";
 import { lessonTableMatch } from "./lessonTableMatch.js"
+import { sortTable } from "./sortTable.js";
 
 let globalConfig = {
   enableDataExpirationReminders: true,
