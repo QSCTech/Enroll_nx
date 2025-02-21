@@ -25,7 +25,6 @@ export async function lessonTableMatch() {
             let timeString = xskcdm1[i].getAttribute('data-sksj');
             const regex = new RegExp(`^(.*)(${dayMap[prefix]})([^节]*)(第|,)(${timeNumber})(节|,)(.*)$`);
             const match = timeString.match(regex);
-            //console.log(match);
             let semesterCompare = xskcdm1[i].getAttribute('data-xxq');
             if (match) {
                 if (semesterCompare.length === 2 || semester === semesterCompare) {
@@ -76,7 +75,6 @@ export async function lessonTableMatch() {
 
     // 合并所有点击事件处理
     document.body.addEventListener("click", function (event) {
-
         if (event.target.closest(".outer_left") || (event.target.matches('[data-xxq]') && event.target.matches('[role="tab"]'))) {
             const regex = /^\d+_\d+$/; // 定义正则表达式
 
@@ -118,20 +116,19 @@ export async function lessonTableMatch() {
 
         for (let prefix in dayMap) {
             let slot;
-            if (event.target.matches(`[id^='${prefix}']`)) {
+            if (event.target.closest(`[id^='${prefix}']`)) {
                 copyy.innerHTML = "";
-                slot = event.target.id;
+                slot = event.target.closest(`[id^='${prefix}']`).id;
             }
-            else if (event.target.parentNode.parentNode.matches(`[id^='${prefix}']`)) {
-                copyy.innerHTML = "";
-                slot = event.target.parentNode.parentNode.id;
-            }
+            // else if (event.target.parentNode.parentNode.matches(`[id^='${prefix}']`)) {
+            //     copyy.innerHTML = "";
+            //     slot = event.target.parentNode.parentNode.id;
+            // }
             else{
                 continue;
             }
             let timeNumber = slot.split('_')[1];
             const semester = matchSemester();
-            console.log(semester);
             renew(timeNumber, semester, prefix);
         }
 

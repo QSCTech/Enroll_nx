@@ -18,9 +18,13 @@
 
 # 教务网功能
 ## 1.补选显示老师名字
-待补充
+![](./assets/course.png)
 ## 2.教材预定显示信息
 ![](./assets/zdbk_books_img.png)
 ### 3.选课界面优化
 点击课程表中某课程名称可以便捷在下方进行操作
 ![](./assets/Lesson.png)
+
+
+1.无法使用chrome.runtime 与登录有关  存储不成功
+与inject.js有关

@@ -1,5 +1,6 @@
 import { zdbk_xsbtx } from "./zdbk.js"
 import * as courses from "./courses.js"
+import downloadpdf from "./inject.js";
 const webxConfig = {
     runAsBookmark: false,
     theme: {//一些主题颜色设置
@@ -26,13 +27,7 @@ export default () => {
         else if (curURL.hostname === 'courses.zju.edu.cn') {
             courses.fetchTodoData();
             courses.observeTodoList();
-            function injectScript() {
-                const script = document.createElement('script');
-                script.src = chrome.runtime.getURL('src/plugins/courses/inject.js');
-                document.head.appendChild(script);
-            }
-            
-            injectScript();
+            downloadpdf();
         }
         else {
             urlHandled = false;
