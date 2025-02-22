@@ -36,6 +36,7 @@ export default ()=>{
                 aEle.click();
                 setTimeout(()=> aEle.remove(),3000);
                 console.log('aEle is removed');
+                clean_btn();
             }
             async function getPPTUrl() {
                 return new Promise((resolve, reject) => {
@@ -72,6 +73,7 @@ export default ()=>{
                   }
             }
             function addDownloadButton(url){
+                clean_btn();
                 var header = globalDocument.querySelector('.header.clearfix')
                 if (header) {
                     console.log('内页展示')
@@ -90,7 +92,7 @@ export default ()=>{
                     btnEle.style.border = 'none';
                     btnEle.style.background = 'transparent';
                     btnEle.style.cursor = 'pointer';
-
+                    btnEle.title='下载完一个文件后请务必刷新页面以继续下载新文件';
                     // 创建图标并插入按钮
                     var iEle = globalDocument.createElement('i');
                     iEle.className = 'font font-download';
@@ -105,7 +107,7 @@ export default ()=>{
                 }
             }
             function clean_btn() {
-                let btn = document.getElementsById('downloadButton');
+                let btn = document.getElementById('downloadButton');
                 if (btn) btn.remove();
                 console.log('btn killed');
             }
