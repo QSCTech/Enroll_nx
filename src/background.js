@@ -50,6 +50,7 @@ function showDataOnPage(title, data, closeTime = 3000, url = "") {
   }
 }
 
+
 chrome.webRequest.onCompleted.addListener(
   function(details) {
     // 检查请求的 URL 是否匹配目标 API
@@ -72,5 +73,5 @@ chrome.webRequest.onCompleted.addListener(
         .catch(error => console.error('获取数据失败:', error));
     }
   },
-  { urls: ["https://courses.zju.edu.cn/api/uploads/reference/document/*/url"] }  // 监听目标 API 请求
+  { urls: ["https://courses.zju.edu.cn/api/uploads/reference/document/*/url"] },
 );
