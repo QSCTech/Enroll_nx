@@ -50,6 +50,7 @@ function showDataOnPage(title, data, closeTime = 3000, url = "") {
   }
 }
 
+
 chrome.webRequest.onCompleted.addListener(
   function(details) {
     // 检查请求的 URL 是否匹配目标 API

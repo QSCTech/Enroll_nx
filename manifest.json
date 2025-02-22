@@ -20,8 +20,11 @@
         "http://chalaoshi-click-s.webvpn.zju.edu.cn:8001/**",
         "https://classroom.zju.edu.cn/*",
         "https://interactivemeta.cmc.zju.edu.cn/*",
-        "https://courses.zju.edu.cn/*"
+        "https://courses.zju.edu.cn/*",
+        "http://wpsoa.zju.edu.cn/*",
+        "https://wpsoa.zju.edu.cn/*"
       ],
+      "all_frames": true,
       "js": [
         "lib/js/jquery.min.js",
         "js/content-script.js"
@@ -42,7 +45,8 @@
     "storage",
     "activeTab",
     "scripting",
-    "webRequest"
+    "webRequest",
+    "tabs"
   ],
   "host_permissions": [
     "https://courses.zju.edu.cn/*", 

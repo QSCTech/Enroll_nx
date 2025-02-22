@@ -4,16 +4,17 @@ export default ()=>{
         'use strict';
         function main() {
             // console.log(window.parent.document.body)
-            var globalDocument = window.parent.document
-            // 使用 MutationObserver 监听 DOM 变化
-            const observer = new MutationObserver(() => {
+            var globalDocument = window.parent.document;
+            let timeout;
+            clearTimeout(timeout);
+            timeout=setTimeout(() => {
                 var pdfViewer = globalDocument.querySelector('#pdf-viewer')
                 if (pdfViewer) {
                     console.log('已检测到PDF Viewer');
                     var src = pdfViewer.getAttribute('src')
                     if (!src) {
                         console.log('no src, skip')
-                        return
+                        return;
                     }
                     console.log(src);
                     var url = decodeURIComponent(src.substr(src.indexOf('http')))
@@ -24,21 +25,17 @@ export default ()=>{
                     else{
                         addDownloadButton(url);
                     }
-                    observer.disconnect();
                 } else {
                     console.log('未检测到PDF-Viewer')
                 }
-            });
-    
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
+            },3000);
             function downloadURL(url) {
                 var aEle = globalDocument.createElement('a')
                 aEle.href = url
                 globalDocument.body.append(aEle)
-                aEle.click()
+                aEle.click();
+                setTimeout(()=> aEle.remove(),3000);
+                console.log('aEle is removed');
             }
             async function getPPTUrl() {
                 return new Promise((resolve, reject) => {
@@ -46,7 +43,7 @@ export default ()=>{
                     reject(new Error("Chrome runtime API不可用"));
                     return;
                   }
-              
+                  
                   chrome.runtime.sendMessage({ action: "getPPTUrl" }, (response) => {
                     // 检查Chrome API的错误
                     if (chrome.runtime.lastError) {
@@ -76,24 +73,36 @@ export default ()=>{
             }
             function addDownloadButton(url){
                 var header = globalDocument.querySelector('.header.clearfix')
-                    if (header) {
-                        console.log('内页展示')
-                        var closeBtn = globalDocument.querySelectorAll('.right.close')[1]
-                        var aEle = globalDocument.createElement('a')
-                        aEle.style.position = 'absolute'
-                        aEle.style.top = '14px'
-                        aEle.style.right = '200px'
-                        aEle.id='downloadButton';
-                        aEle.href = url;
-                        var iEle = globalDocument.createElement('i')
-                        iEle.className = 'font font-download'
-                        aEle.appendChild(iEle);
-                        header.insertBefore(aEle, closeBtn);
-                    } else {
-                        if (confirm('Do you want to download this file?')) {
-                            downloadURL(url);
-                        }
+                if (header) {
+                    console.log('内页展示')
+                    var closeBtn = globalDocument.querySelectorAll('.right.close')[1]
+                    // 创建 button 元素
+                    var btnEle = globalDocument.createElement('button');
+                    btnEle.style.position = 'absolute';
+                    btnEle.style.top = '14px';
+                    btnEle.style.right = '200px';
+                    btnEle.id = 'downloadButton';
+
+                    // 添加点击事件（替代原 href 的直接下载）
+                    btnEle.addEventListener('click', ()=>downloadURL(url));
+
+                    // 设置按钮样式（可选：移除默认按钮样式）
+                    btnEle.style.border = 'none';
+                    btnEle.style.background = 'transparent';
+                    btnEle.style.cursor = 'pointer';
+
+                    // 创建图标并插入按钮
+                    var iEle = globalDocument.createElement('i');
+                    iEle.className = 'font font-download';
+                    btnEle.appendChild(iEle);
+
+                    // 插入到 DOM
+                    header.insertBefore(btnEle, closeBtn);
+                } else {
+                    if (confirm('Do you want to download this file?')) {
+                        downloadURL(url);
                     }
+                }
             }
             function clean_btn() {
                 let btn = document.getElementsById('downloadButton');
@@ -112,3 +121,4 @@ export default ()=>{
     })();
 }
 //下载完成后url不变，必须刷新。自动清楚更新url实现。
+//尝试不用监听器直接抓取
