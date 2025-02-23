@@ -1,8 +1,6 @@
 //在上方表格中点击获取相应时间
 //通过比较时间获取课程代码
 //xskcdm:学生课程代码
-//需要优化：
-// 同一课程点击两次出现类似没有渲染，再点击恢复正常（好怪？）
 export async function lessonTableMatch() {
     // 新建展示模块
     const copyy = document.createElement("div");
