@@ -1,11 +1,18 @@
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action === "getPPTUrl") {
-    chrome.storage.local.get(["pptUrl"], function(result) {
+    chrome.storage.sync.get(["pptUrl"], function(result) {
       sendResponse({ pptUrl: result.pptUrl });
     });
     // 需要返回 true，表示异步响应
     return true;
-  }else{
+  }
+  else if (request.action === 'setShowDiv') {
+    chrome.storage.sync.set({ showDiv: request.value }, () => {
+      console.log(`设置 showDiv 为: ${request.value}`);
+    });
+    sendResponse({ status: 'success' });
+  }
+  else{
     let data = request.data;
     showDataOnPage(data.title, data.message, data.closeTime, data.url);
     sendResponse("已执行弹窗");
@@ -62,7 +69,7 @@ chrome.webRequest.onCompleted.addListener(
           // 假设返回的数据包含目标 PPT 下载 URL
           if (data && data.url) {
             // 存储 URL 到 chrome.storage
-            chrome.storage.local.set({ pptUrl: data.url }, () => {
+            chrome.storage.sync.set({ pptUrl: data.url }, () => {
               console.log('PPT URL 已存储:', data.url);
             });
           }
@@ -75,3 +82,10 @@ chrome.webRequest.onCompleted.addListener(
   },
   { urls: ["https://courses.zju.edu.cn/api/uploads/reference/document/*/url"] },
 );
+// 监听插件安装时初始化设置
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.sync.set({ showDiv: true }, () => {
+    console.log("插件初始化：显示 div");
+  });
+});
+

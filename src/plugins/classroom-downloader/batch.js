@@ -146,6 +146,7 @@ export default () => {
         checkbox.type = "checkbox";
         checkbox.value = video.originalIndex; // 保存视频在原始数组中的索引
         checkbox.className = "videoCheckbox";
+        checkbox.disabled=true;
         checkbox.style.marginRight = "10px";
         if (!video.available) {
           checkbox.disabled = true;
@@ -486,6 +487,112 @@ export default () => {
       .catch((error) => {
         console.log("Error fetching API:", error);
       });
+
+    function checkboxSwitch(flag){
+      //flag为1，使checkbox可选；flag为0，使checkbox不可选
+      const container=document.querySelector('#batch-container');
+      if(container){
+        if(flag===0){
+          const checkboxes = container.querySelectorAll(".videoCheckbox");
+          if(checkboxes){
+            checkboxes.forEach((cb) => {
+              if (!cb.disabled) {
+                cb.disabled=true;
+              }
+            });
+            console.log("checkboxes复选框已全部被禁止点击"); 
+          }else{
+            console.log('fail to get checkboxes');
+          }
+        }
+        else if(flag===1){
+          const checkboxes = container.querySelectorAll(".videoCheckbox");
+          if(checkboxes){
+            checkboxes.forEach((cb) => {
+              if (cb.disabled) {
+                cb.disabled=false;
+              }
+            });
+            console.log("checkboxes复选框已全部允许点击"); 
+          }else{
+            console.log('fail to get checkboxes');
+          }
+        }
+        else{
+          console.log('flag类型错误');
+          return ;
+        }
+      }
+      else{
+        console.log('fail to get batch-container');
+        return;
+      }
+    }
+    // 在页面加载时，检查是否需要显示 div
+    chrome.storage.sync.get('showDiv', ({ showDiv }) => {
+      if (showDiv) {
+        popup();
+      }
+    });
+    function popup() {
+      // 插入弹窗到页面中
+    const popupHTML = `
+    <div id="copyright-declaration-div" style="position: fixed; top: 20px; right: 20px; background: white; padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000;">
+      <label><input type="checkbox" id="enable-download-checkbox"> 我已阅读并承诺依法行事</label><br>
+      <label><input type="checkbox" id="dont-show-again-checkbox"> 不再提示</label>
+      <button id="continue-btn"> 继续下载</button>
+    </div>
+    `;
+      document.body.insertAdjacentHTML('beforeend', popupHTML);
+      const enableDownloadCheckbox = document.getElementById('enable-download-checkbox');
+      const dontShowAgainCheckbox = document.getElementById('dont-show-again-checkbox');
+      const continueBtn=document.getElementById("continue-btn");
+      // 监听“启用下载”复选框的状态
+      enableDownloadCheckbox.addEventListener('change', () => {
+        if (enableDownloadCheckbox.checked) {
+          // 启用下载功能
+          checkboxSwitch(1);
+        }
+        else{
+          checkboxSwitch(0);
+        }
+      });
+
+      // 监听“不再提示”复选框的状态
+      dontShowAgainCheckbox.addEventListener('change', () => {
+        if (dontShowAgainCheckbox.checked) {
+          chrome.runtime.sendMessage({
+            action: 'setShowDiv',
+            value: false
+          });
+        }
+        else{
+          chrome.runtime.sendMessage({
+            action: 'setShowDiv',
+            value: ture
+          });
+        }
+      }); 
+      continueBtn.addEventListener('click',()=>{
+        if(enableDownloadCheckbox.checked){
+          checkboxSwitch(1);
+          removeDiv();
+        }
+        else{
+          alert("请同意声明，否则无法下载视频");
+        }
+      })
+    }
+    
+  
+    // 移除 div
+    function removeDiv() {
+      const div = document.getElementById('copyright-declaration-div');
+      if (div) {
+        div.remove();
+      }
+    }
+
     /**
      * 去除文件名中的非法字符
      * @param {string} name - 原始文件名

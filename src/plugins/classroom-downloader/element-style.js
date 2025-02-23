@@ -13,6 +13,7 @@ export const p = document.createElement("p");
 p.style = lineStyle + btnStyle;
 
 const container = document.createElement("div");
+container.id='batch-container';
 container.style.position = "fixed";
 container.style.bottom = "10px";
 container.style.right = "10px";
