@@ -38,9 +38,15 @@ function tableInit(ths) {
 }
 //有“▲”的表示能够按照这一列的数据排列但是没有排列，有“▼”的表示正在按照这一列的数据排列
 function stateFlash(ths, number) {
-    let th = ths[number];
-    if (th) {
-        th.innerText = th.innerText.replace("▲", "▼"); // 所在列改变
+    for (let i = 0; i < totalTHs.length; i++) {
+        let th = ths[totalTHs[i]];
+        if (th.innerText.includes("▼")) {
+            th.innerText = th.innerText.replace("▼", "▲");
+        }
+    }
+    let changeTh = ths[number];
+    if (changeTh) {
+        changeTh.innerText = changeTh.innerText.replace("▲", "▼"); // 所在列改变
     } else {
         console.error(`Invalid TH3 element at index ${number}`);
     }
