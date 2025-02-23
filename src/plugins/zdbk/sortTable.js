@@ -31,7 +31,7 @@ function clickFunction(ths, number, tablecode, iCol, sDataType) {
 function tableInit(ths) {
     for (let i = 0; i < totalTHs.length; i++) {
         let th = ths[totalTHs[i]];
-        if (!th.innerText.includes("▲")) {
+        if (!th.innerText.includes("▲")&&!th.innerText.includes("▼")) {
             th.innerText = th.innerText + "▲";
         }
     }
