@@ -42,6 +42,94 @@ export default () => {
 
     // CORS代理前缀（如果需要）
     const corsProxy = ""; // 例如 'https://cors-anywhere.herokuapp.com/'
+    // 调用API获取课程目录
+    const apiUrl = `https://classroom.zju.edu.cn/courseapi/v2/course/catalogue?course_id=${course_id}`;
+    console.log(`API URL: ${apiUrl}`);
+    fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // 根据需要添加 credentials: 'include'
+    })
+      .then((response) => {
+        console.log("API响应状态:", response.status);
+        return response.json();
+      })
+      .then((data) => {
+        console.log("API响应数据:", data);
+        if (data.success && data.result && data.result.data) {
+          const items = data.result.data;
+          console.log(`获取到的课程目录项数量: ${items.length}`);
+          // 处理每个视频项
+          const videos = [];
+          for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            let title = item.title;
+            let videoUrl = null;
+            let available = true;
+
+            //if (item.pic) {
+            try {
+              const contentData = JSON.parse(item.content);
+              console.log(`解析第${i + 1}项的content字段成功`);
+
+              if (contentData.playback && contentData.playback.url) {
+                videoUrl = contentData.playback.url;
+                console.log(`第${i + 1}项视频URL: ${videoUrl}`);
+              } else if (contentData.url) {
+                // 处理直接在"url"字段中的情况
+                videoUrl = contentData.url;
+                console.log(`第${i + 1}项视频URL: ${videoUrl}`);
+              } else {
+                available = false;
+                console.log(`第${i + 1}项没有可用的视频URL`);
+              }
+            } catch (e) {
+              console.error(`解析第${i + 1}项的content字段失败:`, e);
+              available = false;
+            }
+            //} else {
+            //    available = false;
+            //    console.log(`第${i + 1}项的pic字段为空，标记为暂无回放`);
+            //}
+
+            // 如果pic为空或videoUrl未获取到，则标记为暂无回放
+            if (!available || !videoUrl) {
+              title += "（暂无回放）";
+            }
+
+            videos.push({
+              title: title,
+              videoUrl: videoUrl,
+              available: available,
+              originalIndex: i,
+            });
+          }
+
+          console.log(
+            `可下载的视频数量: ${videos.filter((v) => v.available).length}`
+          );
+          // 添加批量下载界面
+          addDownloadUI(videos);
+          // 在页面加载时，检查是否需要显示 div
+          chrome.storage.sync.get('showDiv', ({ showDiv }) => {
+            console.log(showDiv);
+            if (showDiv) {
+              popup();
+              checkboxSwitch(0);
+            }
+            else{
+              checkboxSwitch(1);
+            }
+          });
+        } else {
+          console.log("从API获取数据失败，数据结构不符合预期");
+        }
+      })
+      .catch((error) => {
+        console.log("Error fetching API:", error);
+      });
     function addDownloadUI(videos) {
       console.log("正在添加批量下载的用户界面");
       // 创建容器
@@ -146,7 +234,6 @@ export default () => {
         checkbox.type = "checkbox";
         checkbox.value = video.originalIndex; // 保存视频在原始数组中的索引
         checkbox.className = "videoCheckbox";
-        checkbox.disabled=true;
         checkbox.style.marginRight = "10px";
         if (!video.available) {
           checkbox.disabled = true;
@@ -409,85 +496,6 @@ export default () => {
         downloadNext();
       });
     }
-    // 调用API获取课程目录
-    const apiUrl = `https://classroom.zju.edu.cn/courseapi/v2/course/catalogue?course_id=${course_id}`;
-    console.log(`API URL: ${apiUrl}`);
-
-    fetch(apiUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // 根据需要添加 credentials: 'include'
-    })
-      .then((response) => {
-        console.log("API响应状态:", response.status);
-        return response.json();
-      })
-      .then((data) => {
-        console.log("API响应数据:", data);
-        if (data.success && data.result && data.result.data) {
-          const items = data.result.data;
-          console.log(`获取到的课程目录项数量: ${items.length}`);
-          // 处理每个视频项
-          const videos = [];
-          for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            let title = item.title;
-            let videoUrl = null;
-            let available = true;
-
-            //if (item.pic) {
-            try {
-              const contentData = JSON.parse(item.content);
-              console.log(`解析第${i + 1}项的content字段成功`);
-
-              if (contentData.playback && contentData.playback.url) {
-                videoUrl = contentData.playback.url;
-                console.log(`第${i + 1}项视频URL: ${videoUrl}`);
-              } else if (contentData.url) {
-                // 处理直接在"url"字段中的情况
-                videoUrl = contentData.url;
-                console.log(`第${i + 1}项视频URL: ${videoUrl}`);
-              } else {
-                available = false;
-                console.log(`第${i + 1}项没有可用的视频URL`);
-              }
-            } catch (e) {
-              console.error(`解析第${i + 1}项的content字段失败:`, e);
-              available = false;
-            }
-            //} else {
-            //    available = false;
-            //    console.log(`第${i + 1}项的pic字段为空，标记为暂无回放`);
-            //}
-
-            // 如果pic为空或videoUrl未获取到，则标记为暂无回放
-            if (!available || !videoUrl) {
-              title += "（暂无回放）";
-            }
-
-            videos.push({
-              title: title,
-              videoUrl: videoUrl,
-              available: available,
-              originalIndex: i,
-            });
-          }
-
-          console.log(
-            `可下载的视频数量: ${videos.filter((v) => v.available).length}`
-          );
-          // 添加批量下载界面
-          addDownloadUI(videos);
-        } else {
-          console.log("从API获取数据失败，数据结构不符合预期");
-        }
-      })
-      .catch((error) => {
-        console.log("Error fetching API:", error);
-      });
-
     function checkboxSwitch(flag){
       //flag为1，使checkbox可选；flag为0，使checkbox不可选
       const container=document.querySelector('#batch-container');
@@ -528,12 +536,6 @@ export default () => {
         return;
       }
     }
-    // 在页面加载时，检查是否需要显示 div
-    chrome.storage.sync.get('showDiv', ({ showDiv }) => {
-      if (showDiv) {
-        popup();
-      }
-    });
     function popup() {
       // 插入弹窗到页面中
     const popupHTML = `
@@ -548,15 +550,15 @@ export default () => {
       const dontShowAgainCheckbox = document.getElementById('dont-show-again-checkbox');
       const continueBtn=document.getElementById("continue-btn");
       // 监听“启用下载”复选框的状态
-      enableDownloadCheckbox.addEventListener('change', () => {
-        if (enableDownloadCheckbox.checked) {
-          // 启用下载功能
-          checkboxSwitch(1);
-        }
-        else{
-          checkboxSwitch(0);
-        }
-      });
+      // enableDownloadCheckbox.addEventListener('change', () => {
+      //   if (enableDownloadCheckbox.checked) {
+      //     // 启用下载功能
+      //     checkboxSwitch(1);
+      //   }
+      //   else{
+      //     checkboxSwitch(0);
+      //   }
+      // });
 
       // 监听“不再提示”复选框的状态
       dontShowAgainCheckbox.addEventListener('change', () => {
@@ -583,8 +585,6 @@ export default () => {
         }
       })
     }
-    
-  
     // 移除 div
     function removeDiv() {
       const div = document.getElementById('copyright-declaration-div');
