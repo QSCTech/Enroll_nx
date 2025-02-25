@@ -119,7 +119,7 @@ export function noticePop() {
     function popupDownloadBtnState() {
       popupDownloadBtn.disabled = !(agree1.checked && agree2.checked);
       if(agree1.checked && agree2.checked){
-        popupDownloadBtn.style.backgroundColor = 'green';
+        popupDownloadBtn.style.backgroundColor = '#2196f3';
       }else{
         popupDownloadBtn.style.backgroundColor = '#ccc';
       }
