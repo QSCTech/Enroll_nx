@@ -1,5 +1,11 @@
 export let noticeState = 0;
+
 export function noticePop() {
+  // 检查 localStorage 中的状态
+  if (localStorage.getItem('noticeConfirmed') === 'true') {
+    return Promise.resolve(true);
+  }
+
   return new Promise((resolve) => {
     //弹窗文本及样式(有点丑陋)
     const style = document.createElement('style');
@@ -139,6 +145,9 @@ export function noticePop() {
     // 监听继续按钮的点击事件
     popupDownloadBtn.addEventListener('click', () => {
       if (agree1.checked && agree2.checked) {
+        if (showDivCheckbox.checked) {
+          localStorage.setItem('noticeConfirmed', 'true');
+        }
         removeDiv();
         resolve(true);
       } else {
