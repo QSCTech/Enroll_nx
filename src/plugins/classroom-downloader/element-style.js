@@ -1,14 +1,13 @@
-const btnStyle = "cursor:pointer;text-decoration:underline;";
+const btnStyle = "cursor:pointer;text-decoration:none;";
 const lineStyle = "padding:5px 0;";
 
 export const wrap_interactivemeta = document.createElement("div");
 wrap_interactivemeta.style =
-  "margin:0;padding:12px;width:200px;height:5vh;position:fixed;top:10%;right:1%;background:#fff;z-index:9999;opacity:0.8;border-left:solid 2px #008000;border-bottom:solid 2px #008000;font-size:14px;";
+  "margin:0;padding:5px;width=10px;height=20px;background:#fff;z-index:auto;opacity:0.8;";
 
 export const wrap_ZhiYunPPT = document.createElement("div");
 wrap_ZhiYunPPT.style =
-  "margin:0;padding:12px;width:125px;height:15vh;position:fixed;top:15%;right:0;background:#fff;z-index:9999;opacity:0.8;border-left:solid 2px #008000;border-bottom:solid 2px #008000;font-size:14px;";
-
+  "margin:0;padding:5px;width=10px;height=20px;z-index:auto;opacity:0.8;";
 export const p = document.createElement("p");
 p.style = lineStyle + btnStyle;
 

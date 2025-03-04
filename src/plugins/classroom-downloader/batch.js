@@ -574,9 +574,7 @@ export default () => {
       </div>
     
       <div style="text-align: center; margin-top: 30px;">
-      <label class="check-item">
-            <input type="checkbox"  id='showDivCheckbox' > 下次不再提示
-          </label>
+      
         <button id="popupDownloadBtn" disabled>同意并继续下载</button>
         <button id="cancelBtn">取消下载</button>
       </div>
@@ -626,21 +624,6 @@ export default () => {
             });
           });
           
-          // 监听“不再提示”复选框的状态
-          showDivCheckbox.addEventListener('change', () => {
-            if (showDivCheckbox.checked) {
-              chrome.runtime.sendMessage({
-                action: 'setShowDiv',
-                value: false
-              });
-            }
-            else{
-              chrome.runtime.sendMessage({
-                action: 'setShowDiv',
-                value: true
-              });
-            }
-          }); 
           popupDownloadBtn.addEventListener('click',()=>{
             downloadButton.removeEventListener('click',()=>{
                 // 在页面加载时，检查是否需要显示 div
@@ -662,6 +645,10 @@ export default () => {
             console.log('下载按钮监听器已更换');
             popupEnabled=false;
             remove();
+            chrome.runtime.sendMessage({
+              action: 'setShowDiv',
+              value: false
+            });
           });
           cancelBtn.addEventListener('click', () => remove());
         }

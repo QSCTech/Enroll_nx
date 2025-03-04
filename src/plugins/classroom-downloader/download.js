@@ -1,4 +1,8 @@
-import { wrap_interactivemeta, p, wrap_ZhiYunPPT } from "./element-style";
+import {
+  wrap_interactivemeta,
+  p,
+  wrap_ZhiYunPPT 
+  } from "./element-style";
 export function downloadVideo() {
   const courseName =
     document.getElementsByClassName("course_name")[0].innerText;
@@ -13,33 +17,66 @@ export function downloadVideo() {
 }
 
 export function interactivemetaInit() {
-  const wrap = wrap_interactivemeta;
   let popupEnabled=true;
-  const p1 = document.createElement("p");
-  p1.style = "padding:5px 0;";
-  p1.innerText = "请视频开始正常播放后：";
-
-  const p2 = p;
-  p2.innerText = "点击下载视频";
-  p2.id='downloadP';
-  p2.addEventListener("click", function () {
-    // 在页面加载时，检查是否需要显示 div
-    chrome.storage.sync.get('showDiv', ({ showDiv }) => {
-      console.log('showDiv is',showDiv);
-      if (showDiv) {
-        popup();
-      }
-      else{
-        downloadVideo2();
-        remove();
-      }
+  const wrap=createWrap(wrap_interactivemeta,downloadVideo2);
+  const observer=new MutationObserver(()=>appendWrap());
+  startObserver(observer);
+  function startObserver(observer) {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
     });
-});
+  }
+  function createWrap(import_wrap,downloadVideo){
+    const wrap = import_wrap;
+    p.id='downloadP';
+   // 创建 SVG 元素（必须使用 createElementNS）
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 40 30"); // 与 Figma 导出一致
+    svg.setAttribute("width", "40");
+    svg.setAttribute("height", "30");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M27.2917 33.1667H47.7084V30.25H27.2917V33.1667ZM47.7084 17.125H41.875V8.375H33.125V17.125H27.2917L37.5 27.3333L47.7084 17.125Z");
+    path.setAttribute("fill", "#00479D"); 
+    svg.appendChild(path);
+    svg.style.padding='5px';
+    p.appendChild(svg);
 
-  wrap.appendChild(p1);
-  wrap.appendChild(p2);
-  document.body.appendChild(wrap);
+    const text=document.createElement('span');
+    text.textContent="下载视频";
+    text.style.font='16px';
+    text.style.paddingLeft='10px';
+    text.style.position='relative';
+    text.style.bottom='8px';
+    p.appendChild(text);
 
+    p.addEventListener("click", function () {
+      // 在页面加载时，检查是否需要显示 div
+      chrome.storage.sync.get('showDiv', ({ showDiv }) => {
+        console.log('showDiv is',showDiv);
+        if (showDiv) {
+          popup();
+        }
+        else{
+          downloadVideo();
+          remove();
+        }
+      });
+  });
+    wrap.appendChild(p);
+    return wrap;
+  }
+  function appendWrap(){
+    const header_info=document.querySelector('.header-info');
+    const operate_wrap=document.querySelector('.operate_wrap');
+    console.log(operate_wrap);
+    if(header_info){
+    header_info.insertBefore(wrap,operate_wrap);
+    console.log('success');
+    observer.disconnect();
+    }
+    else console.log('fail to append');
+  }
   function downloadVideo2() {
     const courseName = "";
     const videoSrc = document.getElementById("cmc_player_video").src;
@@ -89,10 +126,8 @@ export function interactivemetaInit() {
     // 创建模态框
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
-    
     const modal = document.createElement('div');
     modal.id = 'copyright-modal';
-    
     // 完整内容
     modal.innerHTML = `
       <h1 style="text-align: center; color: #333; border-bottom: 2px solid #eee; padding-bottom: 15px;">版权声明及使用协议</h1>
@@ -129,9 +164,6 @@ export function interactivemetaInit() {
       </div>
     
       <div style="text-align: center; margin-top: 30px;">
-      <label class="check-item">
-            <input type="checkbox"  id='showDivCheckbox' > 下次不再提示
-          </label>
         <button id="popupDownloadBtn" disabled>同意并继续下载</button>
         <button id="cancelBtn">取消下载</button>
       </div>
@@ -166,8 +198,6 @@ export function interactivemetaInit() {
       border: '1px solid #ddd'
     });
     
-    const showDivCheckbox=document.querySelector('#showDivCheckbox');
-    
     // 复选框逻辑
     const checks = [...document.querySelectorAll('.agree-check')];
     
@@ -179,22 +209,7 @@ export function interactivemetaInit() {
         popupDownloadBtn.style.cursor = allChecked ? 'pointer' : 'not-allowed';
       });
     });
-    
-    // 监听“不再提示”复选框的状态
-    showDivCheckbox.addEventListener('change', () => {
-      if (showDivCheckbox.checked) {
-        chrome.runtime.sendMessage({
-          action: 'setShowDiv',
-          value: false
-        });
-      }
-      else{
-        chrome.runtime.sendMessage({
-          action: 'setShowDiv',
-          value: true
-        });
-      }
-    }); 
+     
     popupDownloadBtn.addEventListener('click',()=>{
     p2.removeEventListener('click',()=>{
         // 在页面加载时，检查是否需要显示 div
@@ -204,18 +219,22 @@ export function interactivemetaInit() {
             popup();
           }
           else{
-            downloadVideo2();
+            downloadVideo();
             remove();
           }
         });
     })
     p2.addEventListener('click',()=> {
-      downloadVideo2();
+      downloadVideo();
       remove(); 
     });
     console.log('p2监听器已更换');
     popupEnabled=false;
     remove();
+    chrome.runtime.sendMessage({
+      action: 'setShowDiv',
+      value: false
+    });
     });
     cancelBtn.addEventListener('click', () => remove());
     }
@@ -226,7 +245,7 @@ export function interactivemetaInit() {
     
   }
    // 取消按钮事件
-   function remove(){
+  function remove(){
     const modal=document.querySelector('#copyright-modal');
     const overlay=document.querySelector('.overlay');
     if(overlay){
@@ -247,33 +266,66 @@ export function interactivemetaInit() {
 }
 
 export function ZhiYunPPTInit() {
-  const wrap = wrap_ZhiYunPPT;
   let popupEnabled=true;
-  const p1 = document.createElement("p");
-  p1.style = "padding:5px 0;";
-  p1.innerText = "请视频开始正常播放后：";
-
-  const p2 = p;
-  p2.innerText = "点击下载视频";
-  p2.id='downloadP';
-  p2.addEventListener("click", function () {
-    // 在页面加载时，检查是否需要显示 div
-    chrome.storage.sync.get('showDiv', ({ showDiv }) => {
-      console.log('showDiv is',showDiv);
-      if (showDiv) {
-        popup();
-      }
-      else{
-        downloadVideo();
-        remove();
-      }
+  const wrap=createWrap(wrap_ZhiYunPPT,downloadVideo);
+  const observer=new MutationObserver(()=>appendWrap());
+  startObserver(observer);
+  function startObserver(observer) {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
     });
-});
+  }
+  function createWrap(import_wrap,downloadVideo){
+    const wrap = import_wrap;
+    p.id='downloadP';
+   // 创建 SVG 元素（必须使用 createElementNS）
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 40 30"); // 与 Figma 导出一致
+    svg.setAttribute("width", "40");
+    svg.setAttribute("height", "30");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M27.2917 33.1667H47.7084V30.25H27.2917V33.1667ZM47.7084 17.125H41.875V8.375H33.125V17.125H27.2917L37.5 27.3333L47.7084 17.125Z");
+    path.setAttribute("fill", "#00479D"); 
+    svg.appendChild(path);
+    svg.style.padding='5px';
+    p.appendChild(svg);
 
-  wrap.appendChild(p1);
-  wrap.appendChild(p2);
-  document.body.appendChild(wrap);
+    const text=document.createElement('span');
+    text.textContent="下载视频";
+    text.style.font='16px';
+    text.style.paddingLeft='10px';
+    text.style.position='relative';
+    text.style.bottom='8px';
+    p.appendChild(text);
 
+    p.addEventListener("click", function () {
+      // 在页面加载时，检查是否需要显示 div
+      chrome.storage.sync.get('showDiv', ({ showDiv }) => {
+        console.log('showDiv is',showDiv);
+        if (showDiv) {
+          popup();
+        }
+        else{
+          downloadVideo();
+          remove();
+        }
+      });
+  });
+    wrap.appendChild(p);
+    return wrap;
+  }
+  function appendWrap(){
+    const header_info=document.querySelector('.header-info');
+    const operate_wrap=document.querySelector('.operate_wrap');
+    console.log(operate_wrap.style);
+    if(header_info){
+    header_info.insertBefore(wrap,operate_wrap);
+    console.log('success');
+    observer.disconnect();
+    }
+    else console.log('fail to append');
+  }
   function downloadVideo() {
     const courseName =
       document.getElementsByClassName("course_name")[0].innerText;
@@ -324,10 +376,8 @@ export function ZhiYunPPTInit() {
     // 创建模态框
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
-    
     const modal = document.createElement('div');
     modal.id = 'copyright-modal';
-    
     // 完整内容
     modal.innerHTML = `
       <h1 style="text-align: center; color: #333; border-bottom: 2px solid #eee; padding-bottom: 15px;">版权声明及使用协议</h1>
@@ -364,9 +414,6 @@ export function ZhiYunPPTInit() {
       </div>
     
       <div style="text-align: center; margin-top: 30px;">
-      <label class="check-item">
-            <input type="checkbox"  id='showDivCheckbox' > 下次不再提示
-          </label>
         <button id="popupDownloadBtn" disabled>同意并继续下载</button>
         <button id="cancelBtn">取消下载</button>
       </div>
@@ -401,8 +448,6 @@ export function ZhiYunPPTInit() {
       border: '1px solid #ddd'
     });
     
-    const showDivCheckbox=document.querySelector('#showDivCheckbox');
-    
     // 复选框逻辑
     const checks = [...document.querySelectorAll('.agree-check')];
     
@@ -414,22 +459,7 @@ export function ZhiYunPPTInit() {
         popupDownloadBtn.style.cursor = allChecked ? 'pointer' : 'not-allowed';
       });
     });
-    
-    // 监听“不再提示”复选框的状态
-    showDivCheckbox.addEventListener('change', () => {
-      if (showDivCheckbox.checked) {
-        chrome.runtime.sendMessage({
-          action: 'setShowDiv',
-          value: false
-        });
-      }
-      else{
-        chrome.runtime.sendMessage({
-          action: 'setShowDiv',
-          value: true
-        });
-      }
-    }); 
+     
     popupDownloadBtn.addEventListener('click',()=>{
     p2.removeEventListener('click',()=>{
         // 在页面加载时，检查是否需要显示 div
@@ -451,6 +481,10 @@ export function ZhiYunPPTInit() {
     console.log('p2监听器已更换');
     popupEnabled=false;
     remove();
+    chrome.runtime.sendMessage({
+      action: 'setShowDiv',
+      value: false
+    });
     });
     cancelBtn.addEventListener('click', () => remove());
     }
@@ -461,7 +495,7 @@ export function ZhiYunPPTInit() {
     
   }
    // 取消按钮事件
-   function remove(){
+  function remove(){
     const modal=document.querySelector('#copyright-modal');
     const overlay=document.querySelector('.overlay');
     if(overlay){
