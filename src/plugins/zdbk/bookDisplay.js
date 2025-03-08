@@ -4,6 +4,97 @@ export default async function bookDisplay() {
   const su = extractSuFromCurrentUrl();
   const maxWaitTime = 10000; // 最大等待10秒
   let currentTime = 0;
+  let thElement1,thElement2,thElement3,thElement4;
+  let table;
+
+  // 创建新的 tr 和 td 元素并插入到当前 row 后面
+
+
+  
+  const checkInterval1 = setInterval(() => {
+    if (thElement1&&table) {
+      clearInterval(checkInterval1);
+
+      const columnIndex = Array.from(thElement1.parentElement.children).indexOf(thElement1);
+
+      // 删除<thead>中的<th>
+      thElement1.remove();
+
+      // 删除<tbody>中对应的<td>
+      const tbody = table.querySelector("tbody");
+      
+      if (tbody) {
+        tbody.querySelectorAll("tr").forEach(row => {
+          const tdToRemove = row.querySelectorAll("td")[columnIndex];
+          console.log(tdToRemove);
+          if (tdToRemove) {
+            tdToRemove.remove();
+          }
+        });
+      }
+    }
+    else {
+      thElement1 = document.getElementById('tabGrid_jcydsj');
+      table = document.getElementById("tabGrid");
+    }
+  }, 100);
+
+  const checkInterval2 = setInterval(() => {
+    if (thElement2&&table) {
+      clearInterval(checkInterval2);
+
+      const columnIndex = Array.from(thElement2.parentElement.children).indexOf(thElement2);
+
+      // 删除<thead>中的<th>
+      thElement2.remove();
+
+      // 删除<tbody>中对应的<td>
+      const tbody = table.querySelector("tbody");
+      
+      if (tbody) {
+        tbody.querySelectorAll("tr").forEach(row => {
+          const tdToRemove = row.querySelectorAll("td")[columnIndex];
+          console.log(tdToRemove);
+          if (tdToRemove) {
+            tdToRemove.remove();
+          }
+        });
+      }
+    }
+    else {
+      thElement2 = document.getElementById('tabGrid_skdd');
+      table = document.getElementById("tabGrid");
+    }
+  }, 100);
+
+  const checkInterval3 = setInterval(() => {
+    if (thElement3&&table) {
+      clearInterval(checkInterval3);
+
+      const columnIndex = Array.from(thElement3.parentElement.children).indexOf(thElement3);
+
+      // 删除<thead>中的<th>
+      thElement3.remove();
+
+      // 删除<tbody>中对应的<td>
+      const tbody = table.querySelector("tbody");
+      
+      if (tbody) {
+        tbody.querySelectorAll("tr").forEach(row => {
+          const tdToRemove = row.querySelectorAll("td")[columnIndex];
+          console.log(tdToRemove);
+          if (tdToRemove) {
+            tdToRemove.remove();
+          }
+        });
+      }
+    }
+    else {
+      thElement3 = document.getElementById('tabGrid_sksj');
+      table = document.getElementById("tabGrid");
+    }
+  }, 100);
+
 
   while (targetRows.length === 0 && currentTime < maxWaitTime) {
     const rows = Array.from(
@@ -18,6 +109,8 @@ export default async function bookDisplay() {
 
   // 使用 Promise.all 并发处理所有请求
   await Promise.all(
+
+
     targetRows.map(async (row, index) => {
       const data = "xkkh=" + row.id;
       const url =
@@ -62,15 +155,15 @@ export default async function bookDisplay() {
           });
         }
 
-        // 创建新的 tr 和 td 元素并插入到当前 row 后面
-        const newTr = document.createElement("tr");
-        const newTd = document.createElement("td");
-        newTd.textContent = bookInfo;
-        newTd.colSpan = "8";
-        newTd.style.border = "black 2px solid";
-        newTd.style.whiteSpace = "pre-wrap";
-        newTr.appendChild(newTd);
-        row.parentNode.insertBefore(newTr, row.nextSibling);
+
+        // const newTr = document.createElement("tr");
+        // const newTd = document.createElement("td");
+        // newTd.textContent = bookInfo;
+        // newTd.colSpan = "8";
+        // newTd.style.border = "black 2px solid";
+        // newTd.style.whiteSpace = "pre-wrap";
+        // newTr.appendChild(newTd);
+        // row.parentNode.insertBefore(newTr, row.nextSibling);
       } catch (error) {
         console.error("报错", error);
       }
