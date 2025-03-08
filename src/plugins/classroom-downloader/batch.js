@@ -135,7 +135,7 @@ export default () => {
       header.appendChild(title);
 
       const minimizeButton = minimizeButton_batch;
-
+      minimizeButton.style.background = "none";
       minimizeButton.addEventListener("click", () => {
         if (container.classList.contains("minimized")) {
           // 恢复窗口
@@ -146,7 +146,9 @@ export default () => {
           overallProgressContainer.style.display = "block";
           status.style.display = "block";
           list.style.display = "block";
+          title.style.display='block';
           minimizeButton.innerText = "—";
+          minimizeButton.style.background = "none";
           minimizeButton.title = "最小化";
           console.log("恢复下载界面");
         } else {
@@ -158,7 +160,9 @@ export default () => {
           overallProgressContainer.style.display = "none";
           status.style.display = "none";
           list.style.display = "none";
-          minimizeButton.innerText = "+";
+          title.style.display='none';
+          minimizeButton.innerText = "";
+          minimizeButton.style.backgroundImage="url('../../../assets/batch_download.png')";
           minimizeButton.title = "恢复";
           console.log("最小化下载界面");
         }

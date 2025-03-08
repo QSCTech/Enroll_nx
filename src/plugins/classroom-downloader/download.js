@@ -1,5 +1,4 @@
 import {
-  wrap_interactivemeta,
   p,
   wrap_ZhiYunPPT 
   } from "./element-style";
@@ -18,7 +17,7 @@ export function downloadVideo() {
 
 export function interactivemetaInit() {
   let popupEnabled=true;
-  const wrap=createWrap(wrap_interactivemeta,downloadVideo2);
+  const wrap=createWrap(downloadVideo2);
   const observer=new MutationObserver(()=>appendWrap());
   startObserver(observer);
   function startObserver(observer) {
@@ -27,30 +26,27 @@ export function interactivemetaInit() {
       subtree: true
     });
   }
-  function createWrap(import_wrap,downloadVideo){
-    const wrap = import_wrap;
-    p.id='downloadP';
+  function createWrap(downloadVideo){
+    const wrap = document.createElement('span');
+    wrap.classList.add('opr_btn' ,'collect_span');
+
    // 创建 SVG 元素（必须使用 createElementNS）
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 40 30"); // 与 Figma 导出一致
-    svg.setAttribute("width", "40");
-    svg.setAttribute("height", "30");
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", "M27.2917 33.1667H47.7084V30.25H27.2917V33.1667ZM47.7084 17.125H41.875V8.375H33.125V17.125H27.2917L37.5 27.3333L47.7084 17.125Z");
-    path.setAttribute("fill", "#00479D"); 
-    svg.appendChild(path);
-    svg.style.padding='5px';
-    p.appendChild(svg);
+    svg.classList.add('collect_icon');
+    svg.style.backgroundImage='none';
 
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M7.29169 29.1667H27.7084V26.25H7.29169V29.1667ZM27.7084 13.125H21.875V4.375H13.125V13.125H7.29169L17.5 23.3333L27.7084 13.125Z");
+    path.setAttribute("fill", "#bebebe"); 
+    path.classList.add('good_icon');
+    path.setAttribute('transform', 'translate(-7, -3) scale(1.05)');
+
+    svg.appendChild(path);
+    wrap.appendChild(svg);
     const text=document.createElement('span');
     text.textContent="下载视频";
-    text.style.font='16px';
-    text.style.paddingLeft='10px';
-    text.style.position='relative';
-    text.style.bottom='8px';
-    p.appendChild(text);
-
-    p.addEventListener("click", function () {
+    wrap.appendChild(text);
+    wrap.addEventListener("click", function () {
       // 在页面加载时，检查是否需要显示 div
       chrome.storage.sync.get('showDiv', ({ showDiv }) => {
         console.log('showDiv is',showDiv);
@@ -63,15 +59,12 @@ export function interactivemetaInit() {
         }
       });
   });
-    wrap.appendChild(p);
     return wrap;
   }
   function appendWrap(){
-    const header_info=document.querySelector('.header-info');
-    const operate_wrap=document.querySelector('.operate_wrap');
-    console.log(operate_wrap);
-    if(header_info){
-    header_info.insertBefore(wrap,operate_wrap);
+    const collect_div=document.querySelector('.collect');
+    if(collect_div){
+    collect_div.appendChild(wrap);
     console.log('success');
     observer.disconnect();
     }
@@ -211,7 +204,7 @@ export function interactivemetaInit() {
     });
      
     popupDownloadBtn.addEventListener('click',()=>{
-    p2.removeEventListener('click',()=>{
+    wrap.removeEventListener('click',()=>{
         // 在页面加载时，检查是否需要显示 div
         chrome.storage.sync.get('showDiv', ({ showDiv }) => {
           console.log('showDiv is',showDiv);
@@ -224,7 +217,7 @@ export function interactivemetaInit() {
           }
         });
     })
-    p2.addEventListener('click',()=> {
+    wrap.addEventListener('click',()=> {
       downloadVideo();
       remove(); 
     });
@@ -281,14 +274,23 @@ export function ZhiYunPPTInit() {
     p.id='downloadP';
    // 创建 SVG 元素（必须使用 createElementNS）
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 40 30"); // 与 Figma 导出一致
-    svg.setAttribute("width", "40");
-    svg.setAttribute("height", "30");
+    svg.setAttribute("viewBox", "0 0 15 15"); // 与 Figma 导出一致
+    svg.setAttribute("width", "15");
+    svg.setAttribute("height", "15");
     const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", "M27.2917 33.1667H47.7084V30.25H27.2917V33.1667ZM47.7084 17.125H41.875V8.375H33.125V17.125H27.2917L37.5 27.3333L47.7084 17.125Z");
+    // 原始路径数据
+    const originalPath = "M27.2917 33.1667H47.7084V30.25H27.2917V33.1667ZM47.7084 17.125H41.875V8.375H33.125V17.125H27.2917L37.5 27.3333L47.7084 17.125Z";
+
+    // 缩放路径坐标（按比例 0.3 缩放）
+    const scaledPath = originalPath.replace(/(\d+(\.\d+)?)/g, (match) => {
+      return (parseFloat(match) * 0.6).toFixed(4); // 缩放每个数字并保留四位小数
+    });
+    path.setAttribute("d", scaledPath);
     path.setAttribute("fill", "#00479D"); 
     svg.appendChild(path);
     svg.style.padding='5px';
+    svg.style.paddingRight='8px';
+    svg.style.paddingTop='2px';
     p.appendChild(svg);
 
     const text=document.createElement('span');
@@ -296,9 +298,13 @@ export function ZhiYunPPTInit() {
     text.style.font='16px';
     text.style.paddingLeft='10px';
     text.style.position='relative';
-    text.style.bottom='8px';
+    text.style.bottom='5px';
+    text.style.left='5px';
+    text.style.color='#2c3e50';
+    text.style.fontFamily='PingFang SC-Medium, PingFang SC';
     p.appendChild(text);
 
+    p.style.paddingTop='20px';
     p.addEventListener("click", function () {
       // 在页面加载时，检查是否需要显示 div
       chrome.storage.sync.get('showDiv', ({ showDiv }) => {
@@ -318,7 +324,6 @@ export function ZhiYunPPTInit() {
   function appendWrap(){
     const header_info=document.querySelector('.header-info');
     const operate_wrap=document.querySelector('.operate_wrap');
-    console.log(operate_wrap.style);
     if(header_info){
     header_info.insertBefore(wrap,operate_wrap);
     console.log('success');

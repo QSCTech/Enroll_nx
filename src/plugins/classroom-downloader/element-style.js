@@ -9,7 +9,7 @@ export const wrap_ZhiYunPPT = document.createElement("div");
 wrap_ZhiYunPPT.style =
   "margin:0;padding:5px;width=10px;height=20px;z-index:auto;opacity:0.8;";
 export const p = document.createElement("p");
-p.style = lineStyle + btnStyle;
+p.style = btnStyle;
 
 const container = document.createElement("div");
 container.id='batch-container';
@@ -44,7 +44,6 @@ export const header_batch = header;
 const minimizeButton = document.createElement("button");
 minimizeButton.innerText = "—";
 minimizeButton.style.border = "none";
-minimizeButton.style.background = "none";
 minimizeButton.style.cursor = "pointer";
 minimizeButton.style.fontSize = "16px";
 minimizeButton.style.lineHeight = "1";
