@@ -21,7 +21,7 @@ export function noticePop() {
         padding: 30px;
         border-radius: 8px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        z-index: 1000;
+        z-index: 1009;
         font-family: 'Microsoft YaHei', sans-serif;
       }
       .overlay {
@@ -31,7 +31,7 @@ export function noticePop() {
         right: 0;
         bottom: 0;
         background: rgba(0,0,0,0.5);
-        z-index: 999;
+        z-index: 1006;
       }
       .check-item { 
         margin-bottom: 15px; 
