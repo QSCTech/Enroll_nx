@@ -123,51 +123,33 @@ export default () => {
     function addDownloadUI(videos) {
       console.log("正在添加批量下载的用户界面");
       let popupEnabled=true;
+      let isMinimized = true;
+      let isDownloading=false;
       // 创建容器
       const container = container_batch;
 
       // 创建标题和最小化按钮
       const header = header_batch;
+      header.classList.add('Header');
 
       const title = document.createElement("div");
+      title.classList.add('Title');
       title.style.fontWeight = "bold";
       title.innerText = "批量下载视频";
+      title.style.display='block';
+      title.style.color='black';
+      title.style.textDecoration='none';
+      title.style.borderBottom='none';
+      title.style.padding='0px';
       header.appendChild(title);
 
       const minimizeButton = minimizeButton_batch;
-      minimizeButton.style.background = "none";
-      minimizeButton.addEventListener("click", () => {
-        if (container.classList.contains("minimized")) {
-          // 恢复窗口
-          container.classList.remove("minimized");
-          // 显示所有相关元素
-          selectAllContainer.style.display = "flex";
-          downloadButton.style.display = "block";
-          overallProgressContainer.style.display = "block";
-          status.style.display = "block";
-          list.style.display = "block";
-          title.style.display='block';
-          minimizeButton.innerText = "—";
-          minimizeButton.style.background = "none";
-          minimizeButton.title = "最小化";
-          console.log("恢复下载界面");
-        } else {
-          // 最小化窗口
-          container.classList.add("minimized");
-          // 隐藏所有相关元素
-          selectAllContainer.style.display = "none";
-          downloadButton.style.display = "none";
-          overallProgressContainer.style.display = "none";
-          status.style.display = "none";
-          list.style.display = "none";
-          title.style.display='none';
-          minimizeButton.innerText = "";
-          minimizeButton.style.backgroundImage="url('../../../assets/batch_download.png')";
-          minimizeButton.title = "恢复";
-          console.log("最小化下载界面");
-        }
-      });
-
+      minimizeButton.classList.add('minimizeButton');
+      
+      const eles=initialStylizingButton();
+      const icon=eles[0];
+      const text=eles[1];
+    
       header.appendChild(minimizeButton);
       container.appendChild(header);
 
@@ -213,7 +195,17 @@ export default () => {
       const overallProgressContainer = overallProgressContainer_batch;
       container.appendChild(overallProgressContainer);
       const overallProgressBar = overallProgressBar_batch;
+      
 
+      // 创建进度条
+      const progressContainer = progressContainer_batch;
+      const progressBar = progressBar_batch;
+      progressContainer.appendChild(progressBar);
+
+      // 创建速度和时间信息
+      const infoDiv = infoDiv_batch;
+      container.appendChild(progressContainer);
+      container.appendChild(infoDiv);
       // 创建列表
       const list = list_batch;
       container.appendChild(list);
@@ -224,8 +216,20 @@ export default () => {
 
         const headerDiv = headerDiv_batch;
 
-        
+        // 创建 div 盒子
+        const divBox = document.createElement('div');
+        divBox.classList.add('checkbox-container');  // 为 div 盒子添加类名
+
+        // 为 div 盒子添加圆形边界的样式
+        divBox.style.border = '2px solid #000';  // 设置边框颜色和宽度
+        divBox.style.borderRadius = '15px';  // 设置圆形边界
+        divBox.style.padding = '10px';  // 添加内边距以增大盒子大小
+        divBox.style.margin='5px';
+        divBox.style.display = 'inline-flex';  // 使盒子内元素水平排列
+        divBox.style.alignItems = 'center';  // 垂直居中复选框和文字
+        divBox.style.cursor = 'pointer';  // 鼠标悬停时显示手形指针，表明可以点击
         const checkbox = document.createElement("input");
+        checkbox.id = 'dynamic-checkbox';
         checkbox.type = "checkbox";
         checkbox.value = video.originalIndex; // 保存视频在原始数组中的索引
         checkbox.className = "videoCheckbox";
@@ -238,23 +242,13 @@ export default () => {
         label.style.flex = "1";
         label.style.cursor = "pointer";
         label.innerText = video.title;
-
-        headerDiv.appendChild(checkbox);
-        headerDiv.appendChild(label);
+        divBox.appendChild(checkbox);
+        divBox.appendChild(label);
+        divBox.addEventListener('click', function() {
+          checkbox.checked = !checkbox.checked;  // 切换复选框的选中状态
+        });
+        headerDiv.appendChild(divBox);
         listItem.appendChild(headerDiv);
-
-        // 创建进度条
-        const progressContainer = progressContainer_batch;
-
-        const progressBar = progressBar_batch;
-        progressContainer.appendChild(progressBar);
-
-        // 创建速度和时间信息
-        const infoDiv = infoDiv_batch;
-
-        listItem.appendChild(progressContainer);
-        listItem.appendChild(infoDiv);
-
         list.appendChild(listItem);
         //保存DOM引用用作索引
         video.domRef={
@@ -264,6 +258,10 @@ export default () => {
         }
       });
 
+      toggleState();
+      minimizeButton.addEventListener("click", () => {
+        toggleState();
+      });
       document.body.appendChild(container);
       console.log("批量下载界面已添加到页面");
 
@@ -293,6 +291,7 @@ export default () => {
       });
       function download(){
         console.log("下载按钮被点击");
+        isDownloading=true;
         status.innerText = "开始下载...";
         selectAllCheckbox.disabled=true;
         console.log("selectAllCheckbox全选复选框已被禁止点击");
@@ -307,6 +306,7 @@ export default () => {
             });
           }
           cb.disabled=true;
+          cb.parentElement.disabled=true;
         });
         console.log("checkboxes复选框已全部被禁止点击");
   
@@ -335,6 +335,7 @@ export default () => {
   
         // 显示整体进度条
         overallProgressContainer.style.display = "block";
+        overallProgressContainer.appendChild(overallProgressBar);
         overallProgressBar.style.width = "0%";
         console.log("显示整体进度条");
   
@@ -481,17 +482,19 @@ export default () => {
               overallProgressContainer.style.display = "none";
               console.log("隐藏整体进度条");
             }, 5000);
-  
+            
+            isDownloading=false;
             // 恢复下载按钮和复选框
             downloadButton.disabled = false;
             downloadButton.innerText = "下载选中视频";
             downloadButton.style.backgroundColor = "#4CAF50";
             downloadButton.style.cursor = "pointer";
             console.log("恢复下载按钮状态");
-  
+            
             const checkboxes = container.querySelectorAll(".videoCheckbox");
             checkboxes.forEach((cb) => {
               cb.disabled=false;
+              cb.parentElement.disabled=false;
             });
             selectAllCheckbox.disabled=false;
           }
@@ -676,7 +679,7 @@ export default () => {
           console.log('fail to get the checkboxex for downloading');
         }
       }
-       // 取消按钮事件
+      // 取消按钮事件
       function remove(){
         const modal=document.querySelector('#copyright-modal');
         const overlay=document.querySelector('.overlay');
@@ -694,6 +697,120 @@ export default () => {
         else{
           console.log('fail to remove modal');
         }
+      }
+      // 获取基础元素
+      function initialStylizingButton(){
+        // 创建图标和文本元素
+        const icon = document.createElement('div');
+        icon.classList.add('icon');
+        const imgUrl = chrome.runtime.getURL('assets/batch_download.png');
+        console.log(imgUrl);
+        icon.style.backgroundImage=`url(${imgUrl})`;
+        const text = document.createElement('span');
+        text.classList.add('btnText');
+        text.textContent = '——';
+
+        // 初始化元素结构
+        minimizeButton.appendChild(icon);
+        minimizeButton.appendChild(text);
+
+        // 动态样式配置对象
+        const styles = {
+        container: {
+            display: 'inline-block',
+            transition: 'width 0.3s ease' // 容器宽度过渡动画
+        },
+        button: {
+            padding: '0',
+            border: 'none',
+            background: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            title :"最小化"
+        },
+        icon: {
+            minWidth: '50px',
+            minHeight: '50px'
+        },
+        text: {
+            display: 'none', 
+            fontSize: '16px',
+            fontFamily: 'Arial, sans-serif',
+            color: '#333',
+            whiteSpace: 'nowrap',
+            padding: '0 8px',
+            
+        }
+        };
+
+        // 动态应用样式函数
+        function applyStyles(element, styleRules) {
+        Object.assign(element.style, styleRules);
+        }
+
+        // 初始化应用样式
+        applyStyles(minimizeButton, styles.button);
+        applyStyles(icon, styles.icon);
+        applyStyles(text, styles.text);
+        return [icon,text];
+      }
+      // 精确测量元素宽度的工具函数
+      function measureWidth(element) {
+      const clone = element.cloneNode(true);
+      clone.style.visibility = 'hidden';
+      clone.style.position = 'absolute';
+      document.body.appendChild(clone);
+      const width = clone.offsetWidth;
+      document.body.removeChild(clone);
+      return width;
+      }
+      // 状态切换函数
+      function toggleState() {
+      // 切换显示元素
+      isMinimized = !isMinimized;
+      icon.style.display = isMinimized ? 'block' : 'none';
+      text.style.display = isMinimized ? 'none' : 'inline-block';
+
+      if(isMinimized){
+        // 最小化窗口
+        container.classList.add("minimized");
+        // 隐藏所有相关元素
+        selectAllContainer.style.display = "none";
+        downloadButton.style.display = "none";
+        overallProgressContainer.style.display = "none";
+        infoDiv.style.display='none';
+        status.style.display = "none";
+        list.style.display = "none";
+        title.style.display='none';
+        header.style.margin='0px';
+        // 动态计算目标宽度
+        const targetWidth = isMinimized ? measureWidth(icon) : measureWidth(text);
+        // 应用容器动画
+        container.style.width = `${targetWidth}px`;
+        console.log(targetWidth);
+        console.log("最小化下载界面");
+      }
+      else{
+        // 恢复窗口
+        container.classList.remove("minimized");
+        container.style.width = "250px";
+        // 显示所有相关元素
+        selectAllContainer.style.display = "flex";
+        downloadButton.style.display = "block";
+        overallProgressContainer.style.display = "block";
+        infoDiv.style.display=isDownloading?'block':'none';
+        status.style.display = "block";
+        list.style.display = "block";
+        title.style.display='block';
+        text.style.maxWidth='5px';
+        text.style.position='relative';
+        text.style.right='10px';
+        header.style.marginBottom='12px';
+        console.log("恢复下载界面");
+      }
+     
       }
     }
     
