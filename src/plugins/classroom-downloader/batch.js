@@ -306,8 +306,13 @@ export default () => {
             });
           }
           cb.disabled=true;
-          cb.parentElement.disabled=true;
+          console.log(cb.parentElement);
+          cb.parentElement.disabled=false;
         });
+        const checkbox_containers=container.querySelectorAll(".checkbox-container");
+        checkbox_containers.forEach((cb_container)=>{
+          cb_container.disabled=true;
+        })
         console.log("checkboxes复选框已全部被禁止点击");
   
         if (selectedVideos.length === 0) {
@@ -494,8 +499,13 @@ export default () => {
             const checkboxes = container.querySelectorAll(".videoCheckbox");
             checkboxes.forEach((cb) => {
               cb.disabled=false;
+              console.log(cb.parentElement);
               cb.parentElement.disabled=false;
             });
+            const checkbox_containers=container.querySelectorAll(".checkbox-container");
+            checkbox_containers.forEach((cb_container)=>{
+              cb_container.disabled=false;
+            })
             selectAllCheckbox.disabled=false;
           }
         }

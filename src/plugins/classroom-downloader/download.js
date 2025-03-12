@@ -466,7 +466,7 @@ export function ZhiYunPPTInit() {
     });
      
     popupDownloadBtn.addEventListener('click',()=>{
-    p2.removeEventListener('click',()=>{
+    p.removeEventListener('click',()=>{
         // 在页面加载时，检查是否需要显示 div
         chrome.storage.sync.get('showDiv', ({ showDiv }) => {
           console.log('showDiv is',showDiv);
@@ -479,11 +479,11 @@ export function ZhiYunPPTInit() {
           }
         });
     })
-    p2.addEventListener('click',()=> {
+    p.addEventListener('click',()=> {
       downloadVideo();
       remove(); 
     });
-    console.log('p2监听器已更换');
+    console.log('p监听器已更换');
     popupEnabled=false;
     remove();
     chrome.runtime.sendMessage({
