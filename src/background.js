@@ -89,3 +89,30 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+// 监听特定 URL 的请求
+chrome.webRequest.onHeadersReceived.addListener(
+  function (details) {
+    console.log("响应头捕获：", details);
+
+    // 提取状态码
+    const statusCode = details.statusCode;
+    console.log("状态码：", statusCode);
+
+    // 检查状态码是否为403或404
+    if (statusCode === 403 || statusCode === 404) {
+      console.log(`${statusCode}状态码检测到，准备重载页面`);
+
+      // 重载当前活动标签页
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        if (tabs.length > 0) {
+          console.log("重载标签页：", tabs[0].id);
+          chrome.tabs.reload(tabs[0].id); // 重载页面
+        } else {
+          console.error("未找到活动标签页");
+        }
+      });
+    }
+  },
+  { urls: ["https://api.cc98.org/topic/*"] }, // 监听特定 URL
+  ["responseHeaders"] // 需要获取响应头
+);

@@ -22,13 +22,13 @@
         "https://interactivemeta.cmc.zju.edu.cn/*",
         "https://courses.zju.edu.cn/*",
         "http://wpsoa.zju.edu.cn/*",
-        "https://wpsoa.zju.edu.cn/*"
+        "https://wpsoa.zju.edu.cn/*",
+        "https://www.cc98.org/*"
       ],
       "all_frames": true,
       "js": [
         "lib/js/jquery.min.js",
-        "js/content-script.js"
-        
+        "js/content-script.js"        
       ],
       "css": [
         "lib/css/inject.css"
@@ -46,12 +46,15 @@
     "activeTab",
     "scripting",
     "webRequest",
-    "tabs"
+    "tabs",
+    "<all_urls>"
   ],
   "host_permissions": [
     "https://courses.zju.edu.cn/*", 
     "https://tcmedia.zju.edu.cn/*",
-    "http://tcmedia.zju.edu.cn/*"
+    "http://tcmedia.zju.edu.cn/*",
+    "https://www.cc98.org/*",
+    "https://api.cc98.org/*"
   ],
   "action": {
     "default_icon": "icon.png",
@@ -78,7 +81,8 @@
         "https://interactivemeta.cmc.zju.edu.cn/*",
         "https://chalaoshi.de/*",
         "https://chalaoshi.click/*",
-        "https://courses.zju.edu.cn/*"
+        "https://courses.zju.edu.cn/*",
+        "https://www.cc98.org/*"
       ]
     }
   ]

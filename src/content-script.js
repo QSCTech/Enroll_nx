@@ -2,7 +2,9 @@
 import ZhiYun_Index from "./plugins/classroom-downloader/index.js";
 import ZDBK_Main from "./plugins/zdbk/index.js";
 import Book_Display from "./plugins/zdbk/bookDisplay.js";
-import Courses_Index from "./plugins/courses/index.js"
+import Courses_Index from "./plugins/courses/index.js";
+import {Search_Quick} from "./plugins/CC98/searchQuick.js";
+
 $(document).ready(async function () {
   //如果是查老师的根目录 即url为 chalaoshi.click 或者 http://chalaoshi-clickz-s.webvpn.zju.edu.cn:8001/ url需要完全匹配
   if (
@@ -35,6 +37,7 @@ $(document).ready(async function () {
     window.location.href.includes("https://interactivemeta.cmc.zju.edu.cn/") ||
     window.location.href.includes("https://classroom.zju.edu.cn/livingroom?")
   ) {
+    console.log("hello world");
     ZhiYun_Index();
   } else if (
     window.location.href.includes("http://zdbk.zju.edu.cn/jwglxt/xsxjc")
@@ -47,5 +50,12 @@ $(document).ready(async function () {
     window.location.href.includes("https://courses.zju.edu.cn")
   ){
     Courses_Index();
+  }
+  //cc98快速检索
+  else if(
+    window.location.href.includes("https://www.cc98.org")
+  ){
+    console.log("hello world");
+    //Search_Quick();
   }
 });
