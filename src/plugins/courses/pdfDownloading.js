@@ -18,13 +18,14 @@ export default () => {
         const pdfViewer = globalDocument.querySelector('#pdf-viewer');
         if (pdfViewer) {
           console.log('检测到 PDF Viewer');
+          console.log(pdfViewer);
           const src = pdfViewer.getAttribute('src');
           if (!src) {
             console.log('没有 src，跳过');
             return;
           }
           console.log('PDF 文件的 URL:', src);
-          const url = decodeURIComponent(src.substr(src.indexOf('http')));
+          const url = processUrl(src);
           console.log('解码后的 URL:', url);
 
           if (!url.includes('http') || !url.includes('https')) {
@@ -39,6 +40,33 @@ export default () => {
         }
       }
 
+      function processUrl(url) {
+        // 将URL拆分为基础路径和查询参数部分
+        const [base, query] = url.split('?');
+        // 如果没有查询参数，直接返回原URL
+        if (!query) return url;
+    
+        // 将查询参数按"&"拆分为数组
+        const params = query.split('&');
+        let targetIndex = -1;
+    
+        // 遍历参数数组，查找第一个以 "_w_third_file_id=" 开头的参数
+        for (let i = 0; i < params.length; i++) {
+            if (params[i].startsWith('_w_third_file_id=')) {
+                targetIndex = i;
+                break;  // 找到后立即停止遍历
+            }
+        }
+    
+        // 如果未找到目标参数，返回原URL
+        if (targetIndex === -1) return url;
+    
+        // 保留目标参数及其之前的所有参数，丢弃之后的部分
+        const newParams = params.slice(0, targetIndex + 1);
+        // 重组URL
+        return base + '?' + newParams.join('&');
+      }
+    
       function downloadURL(url) {
         const aEle = globalDocument.createElement('a');
         aEle.href = url;
