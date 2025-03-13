@@ -799,6 +799,7 @@ export default () => {
         const targetWidth = isMinimized ? measureWidth(icon) : measureWidth(text);
         // 应用容器动画
         container.style.width = `${targetWidth}px`;
+        container.style.minWidth=container.style.width = `${targetWidth}px`;
         console.log(targetWidth);
         console.log("最小化下载界面");
       }
@@ -806,6 +807,7 @@ export default () => {
         // 恢复窗口
         container.classList.remove("minimized");
         container.style.width = "250px";
+        container.style.minWidth = "17%";
         // 显示所有相关元素
         selectAllContainer.style.display = "flex";
         downloadButton.style.display = "block";

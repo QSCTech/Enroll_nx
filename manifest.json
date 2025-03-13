@@ -46,8 +46,7 @@
     "activeTab",
     "scripting",
     "webRequest",
-    "tabs",
-    "<all_urls>"
+    "tabs"
   ],
   "host_permissions": [
     "https://courses.zju.edu.cn/*", 
