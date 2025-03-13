@@ -84,7 +84,7 @@ export default async function bookDisplay() {
 
 
 
-  removeColumns('tabGrid_jcydsj', table);
+  removeColumns('tabGrid_xxq', table);
   removeColumns('tabGrid_skdd', table);
   removeColumns('tabGrid_sksj', table);
 }
