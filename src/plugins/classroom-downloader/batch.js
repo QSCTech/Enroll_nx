@@ -181,7 +181,7 @@ export default () => {
       });
       downloadButton.addEventListener("mouseout", () => {
         if (!downloadButton.disabled) {
-          downloadButton.style.backgroundColor = "#4CAF50";
+          downloadButton.style.backgroundColor = "rgba(0,71,157,255)";
         }
       });
 
@@ -212,6 +212,7 @@ export default () => {
 
       // 添加视频项
       videos.forEach((video, index) => {
+        
         const listItem = listItem_batch;
 
         const headerDiv = headerDiv_batch;
@@ -223,17 +224,20 @@ export default () => {
         // 为 div 盒子添加圆形边界的样式
         divBox.style.border = '2px solid #000';  // 设置边框颜色和宽度
         divBox.style.borderRadius = '15px';  // 设置圆形边界
-        divBox.style.padding = '10px';  // 添加内边距以增大盒子大小
+        divBox.style.padding = '5px';  // 添加内边距以增大盒子大小
         divBox.style.margin='5px';
-        divBox.style.display = 'inline-flex';  // 使盒子内元素水平排列
+        divBox.style.display = 'flex';  // 使盒子内元素水平排列
         divBox.style.alignItems = 'center';  // 垂直居中复选框和文字
+        divBox.style.justifyContent='space-between';
         divBox.style.cursor = 'pointer';  // 鼠标悬停时显示手形指针，表明可以点击
+        divBox.style.maxWidth='70%';
         const checkbox = document.createElement("input");
         checkbox.id = 'dynamic-checkbox';
         checkbox.type = "checkbox";
         checkbox.value = video.originalIndex; // 保存视频在原始数组中的索引
         checkbox.className = "videoCheckbox";
-        checkbox.style.marginRight = "10px";
+        checkbox.style.marginRight = "7%";
+        checkbox.style.marginLeft = "2%";
         if (!video.available) {
           checkbox.disabled = true;
         }
@@ -244,18 +248,30 @@ export default () => {
         label.innerText = video.title;
         divBox.appendChild(checkbox);
         divBox.appendChild(label);
-        divBox.addEventListener('click', function() {
-          checkbox.checked = !checkbox.checked;  // 切换复选框的选中状态
+        
+        divBox.addEventListener('click', ()=>handleDivBoxClick(checkbox));
+        divBox.addEventListener('mouseenter', () => {
+          if (!isDownloading) {
+            divBox.style.backgroundColor = 'rgba(230,237,246,255)';
+          }
         });
-        headerDiv.appendChild(divBox);
-        listItem.appendChild(headerDiv);
-        list.appendChild(listItem);
+        divBox.addEventListener('mouseleave',()=>{
+          divBox.style.backgroundColor='transparent';
+        })
+        if(!video.title.includes('暂无回放')){
+          headerDiv.appendChild(divBox);
+          listItem.appendChild(headerDiv);
+          list.appendChild(listItem);  
+         }
+        
         //保存DOM引用用作索引
         video.domRef={
           listItem,
           progressBar,
           infoDiv
         }
+
+        
       });
 
       toggleState();
@@ -306,13 +322,9 @@ export default () => {
             });
           }
           cb.disabled=true;
-          console.log(cb.parentElement);
-          cb.parentElement.disabled=false;
+          const divBox=cb.parentElement;
+          switchClickable(divBox,false);
         });
-        const checkbox_containers=container.querySelectorAll(".checkbox-container");
-        checkbox_containers.forEach((cb_container)=>{
-          cb_container.disabled=true;
-        })
         console.log("checkboxes复选框已全部被禁止点击");
   
         if (selectedVideos.length === 0) {
@@ -485,6 +497,7 @@ export default () => {
             // 隐藏整体进度条
             setTimeout(() => {
               overallProgressContainer.style.display = "none";
+              infoDiv.innerText='';
               console.log("隐藏整体进度条");
             }, 5000);
             
@@ -495,17 +508,12 @@ export default () => {
             downloadButton.style.backgroundColor = "#4CAF50";
             downloadButton.style.cursor = "pointer";
             console.log("恢复下载按钮状态");
-            
             const checkboxes = container.querySelectorAll(".videoCheckbox");
             checkboxes.forEach((cb) => {
               cb.disabled=false;
-              console.log(cb.parentElement);
-              cb.parentElement.disabled=false;
+              const divBox=cb.parentElement;
+              switchClickable(divBox,true);
             });
-            const checkbox_containers=container.querySelectorAll(".checkbox-container");
-            checkbox_containers.forEach((cb_container)=>{
-              cb_container.disabled=false;
-            })
             selectAllCheckbox.disabled=false;
           }
         }
@@ -636,7 +644,7 @@ export default () => {
             checkbox.addEventListener('change', () => {
               const allChecked = checks.every(c => c.checked);
               popupDownloadBtn.disabled = !allChecked;
-              popupDownloadBtn.style.backgroundColor = allChecked ? '#2196F3' : '#ccc';
+              popupDownloadBtn.style.backgroundColor = allChecked ? 'rgba(0,71,157,255)' : '#ccc';
               popupDownloadBtn.style.cursor = allChecked ? 'pointer' : 'not-allowed';
             });
           });
@@ -689,6 +697,28 @@ export default () => {
           console.log('fail to get the checkboxex for downloading');
         }
       }
+      function handleDivBoxClick(checkbox){
+        checkbox.checked = !checkbox.checked;  // 切换复选框的选中状态
+      }
+      function switchClickable(divBox,enableClick){
+        const checkbox=divBox.querySelector('input');
+        const label=divBox.querySelector('label');
+        if(enableClick){
+          divBox.style.pointerEvents='auto';
+          label.style.pointerEvents='auto';
+          divBox.addEventListener('click',()=>handleDivBoxClick(checkbox));
+          divBox.style.cursor='pointer';
+          checkbox.style.cursor='pointer';
+          label.style.cursor='pointer';
+          console.log('复选框可以点击');
+        }
+        else{
+          divBox.style.pointerEvents='none';
+          label.style.pointerEvents='none';
+          console.log('复选框不可点击');
+          
+        }
+      }
       // 取消按钮事件
       function remove(){
         const modal=document.querySelector('#copyright-modal');
@@ -719,7 +749,7 @@ export default () => {
         const text = document.createElement('span');
         text.classList.add('btnText');
         text.textContent = '——';
-
+        text.style.transform="scale(0.5,0.5)";
         // 初始化元素结构
         minimizeButton.appendChild(icon);
         minimizeButton.appendChild(text);
@@ -800,20 +830,25 @@ export default () => {
         // 应用容器动画
         container.style.width = `${targetWidth}px`;
         container.style.minWidth=container.style.width = `${targetWidth}px`;
+        container.style.borderRadius = '50%';
+        container.style.border = '1px solid transparent';
         console.log(targetWidth);
         console.log("最小化下载界面");
       }
       else{
         // 恢复窗口
         container.classList.remove("minimized");
-        container.style.width = "250px";
-        container.style.minWidth = "17%";
+        container.style.minWidth = "18%";
+        container.style.border = "1px solid rgba(116,189,242,255)";
+        container.style.borderRadius = '0';
         // 显示所有相关元素
         selectAllContainer.style.display = "flex";
         downloadButton.style.display = "block";
-        overallProgressContainer.style.display = "block";
         infoDiv.style.display=isDownloading?'block':'none';
-        status.style.display = "block";
+        if(status.innerText){
+          status.style.display = "block";
+          overallProgressContainer.style.display = "block";
+        }
         list.style.display = "block";
         title.style.display='block';
         text.style.maxWidth='5px';
