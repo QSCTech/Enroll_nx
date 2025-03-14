@@ -786,7 +786,8 @@ export default () => {
         },
         icon: {
             minWidth: '50px',
-            minHeight: '50px'
+            minHeight: '50px',
+            transform:'scale(0.7,0.7)'
         },
         text: {
             display: 'none', 
@@ -846,6 +847,7 @@ export default () => {
         container.style.minWidth=container.style.width = `${targetWidth}px`;
         container.style.borderRadius = '50%';
         container.style.border = '1px solid transparent';
+        container.style.padding='2px';
         console.log(targetWidth);
         console.log("最小化下载界面");
       }
@@ -854,6 +856,7 @@ export default () => {
         container.classList.remove("minimized");
         container.style.minWidth = "18%";
         container.style.border = "1px solid rgba(116,189,242,255)";
+        container.style.padding='15px';
         container.style.borderRadius = '0';
         // 显示所有相关元素
         selectAllContainer.style.display = "flex";
