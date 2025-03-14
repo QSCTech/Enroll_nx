@@ -174,12 +174,14 @@ export default () => {
       // 创建下载按钮
       const downloadButton = downloadButton_batch;
       downloadButton.id='downloadBtn';
-      downloadButton.addEventListener("mouseover", () => {
+      downloadButton.addEventListener("mouseover", (event) => {
+        event.stopPropagation();
         if (!downloadButton.disabled) {
           downloadButton.style.backgroundColor = "#45a049";
         }
       });
-      downloadButton.addEventListener("mouseout", () => {
+      downloadButton.addEventListener("mouseout", (event) => {
+        event.stopPropagation();
         if (!downloadButton.disabled) {
           downloadButton.style.backgroundColor = "rgba(0,71,157,255)";
         }
@@ -237,6 +239,9 @@ export default () => {
         checkbox.className = "videoCheckbox";
         checkbox.style.marginRight = "7%";
         checkbox.style.marginLeft = "2%";
+        checkbox.addEventListener('click',(event)=>{
+          event.stopPropagation(); // 阻止事件冒泡
+        })
         if (!video.available) {
           checkbox.disabled = true;
         }
@@ -248,7 +253,10 @@ export default () => {
         divBox.appendChild(checkbox);
         divBox.appendChild(label);
         
-        divBox.addEventListener('click', ()=>handleDivBoxClick(checkbox));
+        divBox.addEventListener('click', (event)=>{
+          event.stopPropagation();
+          handleDivBoxClick(checkbox)
+        });
         divBox.addEventListener('mouseenter', () => {
           if (!isDownloading) {
             divBox.style.backgroundColor = 'rgba(230,237,246,255)';
@@ -274,7 +282,8 @@ export default () => {
       });
 
       toggleState();
-      minimizeButton.addEventListener("click", () => {
+      minimizeButton.addEventListener("click", (event) => {
+        event.stopPropagation();
         toggleState();
       });
       document.body.appendChild(container);
@@ -291,7 +300,8 @@ export default () => {
         console.log(`全选复选框状态改变为: ${this.checked}`);
       });
 
-      downloadButton.addEventListener("click", function () {
+      downloadButton.addEventListener("click", function (event) {
+        event.stopPropagation();
           // 在页面加载时，检查是否需要显示 div
           chrome.storage.sync.get('showDiv', ({ showDiv }) => {
             console.log('showDiv is',showDiv);
@@ -655,7 +665,8 @@ export default () => {
           const checks = [...document.querySelectorAll('.agree-check')];
           
           checks.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
+            checkbox.addEventListener('change', (event) => {
+              event.stopPropagation();
               const allChecked = checks.every(c => c.checked);
               popupDownloadBtn.disabled = !allChecked;
               popupDownloadBtn.style.backgroundColor = allChecked ? 'rgba(0,71,157,255)' : '#ccc';
@@ -663,7 +674,8 @@ export default () => {
             });
           });
           
-          popupDownloadBtn.addEventListener('click',()=>{
+          popupDownloadBtn.addEventListener('click',(event)=>{
+            event.stopPropagation();
             downloadButton.removeEventListener('click',()=>{
                 // 在页面加载时，检查是否需要显示 div
                 chrome.storage.sync.get('showDiv', ({ showDiv }) => {
@@ -677,7 +689,8 @@ export default () => {
                   }
                 });
             })
-            downloadButton.addEventListener('click',()=> {
+            downloadButton.addEventListener('click',(event)=> {
+              event.stopPropagation();
               download();
               remove(); 
             });
@@ -720,7 +733,10 @@ export default () => {
         if(enableClick){
           divBox.style.pointerEvents='auto';
           label.style.pointerEvents='auto';
-          divBox.addEventListener('click',()=>handleDivBoxClick(checkbox));
+          divBox.addEventListener('click',(event)=>{
+            event.stopPropagation();
+            handleDivBoxClick(checkbox)
+          });
           divBox.style.cursor='pointer';
           checkbox.style.cursor='pointer';
           label.style.cursor='pointer';
