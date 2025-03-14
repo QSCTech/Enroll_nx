@@ -225,7 +225,6 @@ export default () => {
         divBox.style.border = '2px solid #000';  // 设置边框颜色和宽度
         divBox.style.borderRadius = '15px';  // 设置圆形边界
         divBox.style.padding = '5px';  // 添加内边距以增大盒子大小
-        divBox.style.margin='5px';
         divBox.style.display = 'flex';  // 使盒子内元素水平排列
         divBox.style.alignItems = 'center';  // 垂直居中复选框和文字
         divBox.style.justifyContent='space-between';
