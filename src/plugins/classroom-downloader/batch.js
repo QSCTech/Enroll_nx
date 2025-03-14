@@ -305,219 +305,234 @@ export default () => {
           });
       });
       function download(){
-        console.log("下载按钮被点击");
-        isDownloading=true;
-        status.innerText = "开始下载...";
-        selectAllCheckbox.disabled=true;
-        console.log("selectAllCheckbox全选复选框已被禁止点击");
-        const checkboxes = container.querySelectorAll(".videoCheckbox");
-        const selectedVideos = [];
-        checkboxes.forEach((cb) => {
-          if (cb.checked) {
-            const videoIndex = parseInt(cb.value);
-            selectedVideos.push({
-              video: videos[videoIndex],
-              index: videos[videoIndex].domRef
-            });
-          }
-          cb.disabled=true;
-          const divBox=cb.parentElement;
-          switchClickable(divBox,false);
-        });
-        console.log("checkboxes复选框已全部被禁止点击");
-  
-        if (selectedVideos.length === 0) {
-          alert("请选择要下载的视频");
-          status.innerText = "";
-          console.log("未选择任何视频进行下载");
-          return;
+        if(isDownloading){
+          console.log('已经开始下载');
         }
-  
-        console.log(`选中的视频数量: ${selectedVideos.length}`);
-        selectedVideos.forEach((videoObj, idx) => {
-          console.log(
-            `准备下载 (${idx + 1}/${selectedVideos.length}): ${
-              videoObj.video.title
-            } - ${videoObj.video.videoUrl}`
-          );
-        });
-  
-        // 禁用下载按钮并更改文本
-        downloadButton.disabled = true;
-        downloadButton.innerText = "下载中...";
-        downloadButton.style.backgroundColor = "#888";
-        downloadButton.style.cursor = "not-allowed";
-        console.log("下载按钮已禁用，文本已更改为 '下载中...'");
-  
-        // 显示整体进度条
-        overallProgressContainer.style.display = "block";
-        overallProgressContainer.appendChild(overallProgressBar);
-        overallProgressBar.style.width = "0%";
-        console.log("显示整体进度条");
-  
-        let currentDownload = 0;
-        let completed = 0;
-  
-        function downloadNext() {
-          if (currentDownload < selectedVideos.length) {
-            const videoObj = selectedVideos[currentDownload];
-            const video = videoObj.video;
-            const { listItem, progressBar, infoDiv } = video.domRef;
-            const progressContainer =listItem.querySelector("div:nth-child(2)");
-            if (!listItem || !progressBar || !infoDiv) {
-              console.error(`错误：未找到listItem。`);
-              currentDownload++;  // 跳过当前下载
-              downloadNext(); // 继续下载下一个
-              return;  // 如果找不到 listItem，就跳过
+        else{
+          console.log("下载按钮被点击");
+          isDownloading=true;
+          status.innerText = "开始下载...";
+          selectAllCheckbox.disabled=true;
+          console.log("selectAllCheckbox全选复选框已被禁止点击");
+          const checkboxes = container.querySelectorAll(".videoCheckbox");
+          const selectedVideos = [];
+          const activeXHRs = []; // 存储所有活动的XHR对象
+          checkboxes.forEach((cb) => {
+            if (cb.checked) {
+              const videoIndex = parseInt(cb.value);
+              selectedVideos.push({
+                video: videos[videoIndex],
+                index: videos[videoIndex].domRef
+              });
             }
-            status.innerText = `正在下载 (${currentDownload + 1}/${
-              selectedVideos.length
-            }): ${video.title}`;
+            cb.disabled=true;
+            const divBox=cb.parentElement;
+            switchClickable(divBox,false);
+          });
+          console.log("checkboxes复选框已全部被禁止点击");
+    
+          if (selectedVideos.length === 0) {
+            alert("请选择要下载的视频");
+            status.innerText = "";
+            console.log("未选择任何视频进行下载");
+            return;
+          }
+    
+          console.log(`选中的视频数量: ${selectedVideos.length}`);
+          selectedVideos.forEach((videoObj, idx) => {
             console.log(
-              `开始下载 (${currentDownload + 1}/${selectedVideos.length}): ${
-                video.title
-              } - ${video.videoUrl}`
+              `准备下载 (${idx + 1}/${selectedVideos.length}): ${
+                videoObj.video.title
+              } - ${videoObj.video.videoUrl}`
             );
-  
-            progressContainer.style.display = "block";
-            infoDiv.style.display = "block";
-  
-            // 创建 XHR 请求
-            const xhr = new XMLHttpRequest();
-            const downloadUrl = corsProxy + video.videoUrl;
-            console.log(`下载链接: ${downloadUrl}`);
-            xhr.open("GET", downloadUrl, true);
-            xhr.responseType = "blob";
-  
-            let startTime = Date.now();
-  
-            // 监听进度
-            xhr.onprogress = function (event) {
-              if (event.lengthComputable) {
-                const percentComplete = (
-                  (event.loaded / event.total) *
+          });
+    
+          // 禁用下载按钮并更改文本
+          downloadButton.disabled = true;
+          downloadButton.innerText = "下载中...";
+          downloadButton.style.backgroundColor = "#888";
+          downloadButton.style.cursor = "not-allowed";
+          console.log("下载按钮已禁用，文本已更改为 '下载中...'");
+    
+          // 显示整体进度条
+          overallProgressContainer.style.display = "block";
+          overallProgressContainer.appendChild(overallProgressBar);
+          overallProgressBar.style.width = "0%";
+          console.log("显示整体进度条");
+    
+          let currentDownload = 0;
+          let completed = 0;
+    
+          function downloadNext() {
+            if (currentDownload < selectedVideos.length) {
+              const videoObj = selectedVideos[currentDownload];
+              const video = videoObj.video;
+              const { listItem, progressBar, infoDiv } = video.domRef;
+              const progressContainer =listItem.querySelector("div:nth-child(2)");
+              if (!listItem || !progressBar || !infoDiv) {
+                console.error(`错误：未找到listItem。`);
+                currentDownload++;  // 跳过当前下载
+                downloadNext(); // 继续下载下一个
+                return;  // 如果找不到 listItem，就跳过
+              }
+              status.innerText = `正在下载 (${currentDownload + 1}/${
+                selectedVideos.length
+              }): ${video.title}`;
+              console.log(
+                `开始下载 (${currentDownload + 1}/${selectedVideos.length}): ${
+                  video.title
+                } - ${video.videoUrl}`
+              );
+    
+              progressContainer.style.display = "block";
+              infoDiv.style.display = "block";
+              
+              // 检查是否已经存在正在下载的 XHR
+              const existingXHR = activeXHRs.find(xhr => xhr.videoUrl === video.videoUrl);
+              if (existingXHR) {
+                console.log(`视频已在下载中: ${video.title}，跳过此视频`);
+                downloadNext(); // 继续下载下一个
+                return;  // 如果该视频已在下载，跳过
+              }
+              // 创建 XHR 请求
+              const xhr = new XMLHttpRequest();
+              xhr.videoUrl = video.videoUrl;
+              console.log(activeXHRs);
+              activeXHRs.push(xhr); // 将XHR加入管理列表
+              const downloadUrl = corsProxy + video.videoUrl;
+              console.log(`下载链接: ${downloadUrl}`);
+              xhr.open("GET", downloadUrl, true);
+              xhr.responseType = "blob";
+              console.log(xhr);
+              let startTime = Date.now();
+    
+              // 监听进度
+              xhr.onprogress = function (event) {
+                if (event.lengthComputable) {
+                  const percentComplete = (
+                    (event.loaded / event.total) *
+                    100
+                  ).toFixed(2);
+                  progressBar.style.width = percentComplete + "%";
+    
+                  // 计算下载速度和剩余时间
+                  const currentTime = Date.now();
+                  const elapsedTime = (currentTime - startTime) / 1000; // 秒
+                  const bytesLoaded = event.loaded;
+                  const speed =
+                    elapsedTime > 0
+                      ? (bytesLoaded / elapsedTime / 1024).toFixed(2)
+                      : "0"; // KB/s
+    
+                  const remainingBytes = event.total - event.loaded;
+                  const estimatedTime =
+                    speed > 0 ? (remainingBytes / 1024 / speed).toFixed(2) : "0";
+    
+                  infoDiv.innerText = `速度: ${speed} KB/s | 预计剩余时间: ${estimatedTime} s`;
+    
+                  //console.log(`下载进度 (${video.title}): ${percentComplete}% | 速度: ${speed} KB/s | 预计剩余时间: ${estimatedTime} s`);
+                }
+              };
+    
+              // 监听完成
+              xhr.onload = function () {
+                if (xhr.status === 200 || xhr.status === 206) {
+                  const blob = xhr.response;
+                  const url = window.URL.createObjectURL(blob);
+                      // 创建并点击隐藏的 <a> 标签
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = sanitizeFilename(video.title) + ".mp4";
+                      a.style.display = "none";
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+        
+                      // 释放 Blob URL
+                      window.URL.revokeObjectURL(url);
+        
+                      console.log(`下载已启动 (${video.title}): ${a.download}`);
+                    
+                
+                } else {
+                  console.error(
+                    `下载失败 (${video.title}): 状态码 ${xhr.status}`
+                  );
+                  alert(`下载失败: ${video.title} （状态码 ${xhr.status}）`);
+                }
+                completed++;
+                console.log(
+                  `完成下载: ${video.title} (${completed}/${selectedVideos.length})`
+                );
+    
+                // 更新整体进度条
+                const progress = (
+                  (completed / selectedVideos.length) *
                   100
                 ).toFixed(2);
-                progressBar.style.width = percentComplete + "%";
-  
-                // 计算下载速度和剩余时间
-                const currentTime = Date.now();
-                const elapsedTime = (currentTime - startTime) / 1000; // 秒
-                const bytesLoaded = event.loaded;
-                const speed =
-                  elapsedTime > 0
-                    ? (bytesLoaded / elapsedTime / 1024).toFixed(2)
-                    : "0"; // KB/s
-  
-                const remainingBytes = event.total - event.loaded;
-                const estimatedTime =
-                  speed > 0 ? (remainingBytes / 1024 / speed).toFixed(2) : "0";
-  
-                infoDiv.innerText = `速度: ${speed} KB/s | 预计剩余时间: ${estimatedTime} s`;
-  
-                //console.log(`下载进度 (${video.title}): ${percentComplete}% | 速度: ${speed} KB/s | 预计剩余时间: ${estimatedTime} s`);
+                overallProgressBar.style.width = progress + "%";
+                console.log(`整体进度: ${progress}%`);
+    
+                currentDownload++;
+                console.log(`currentDownload is ${currentDownload}`);
+                // 触发下一个下载
+                downloadNext();
               }
-            };
-  
-            // 监听完成
-            xhr.onload = function () {
-              if (xhr.status === 200 || xhr.status === 206) {
-                const blob = xhr.response;
-                const url = window.URL.createObjectURL(blob);
-  
-                // 创建并点击隐藏的 <a> 标签
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = sanitizeFilename(video.title) + ".mp4";
-                a.style.display = "none";
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-  
-                // 释放 Blob URL
-                window.URL.revokeObjectURL(url);
-  
-                console.log(`下载已启动 (${video.title}): ${a.download}`);
-              } else {
-                console.error(
-                  `下载失败 (${video.title}): 状态码 ${xhr.status}`
+    
+              // 监听错误
+              xhr.onerror = function () {
+                console.error(`下载失败 (${video.title}): 网络错误`);
+                alert(`下载失败: ${video.title} （网络错误）`);
+    
+                completed++;
+                console.log(
+                  `下载错误处理: ${video.title} (${completed}/${selectedVideos.length})`
                 );
-                alert(`下载失败: ${video.title} （状态码 ${xhr.status}）`);
-              }
-  
-              completed++;
-              console.log(
-                `完成下载: ${video.title} (${completed}/${selectedVideos.length})`
-              );
-  
-              // 更新整体进度条
-              const progress = (
-                (completed / selectedVideos.length) *
-                100
-              ).toFixed(2);
-              overallProgressBar.style.width = progress + "%";
-              console.log(`整体进度: ${progress}%`);
-  
-              currentDownload++;
-              console.log('currentDownload is ${currentDownload}');
-              // 触发下一个下载
-              downloadNext();
+    
+                // 更新整体进度条
+                const progress = (
+                  (completed / selectedVideos.length) *
+                  100
+                ).toFixed(2);
+                overallProgressBar.style.width = progress + "%";
+                console.log(`整体进度: ${progress}%`);
+                xhr.abort();
+                currentDownload++;
+                // 触发下一个下载
+                setTimeout(downloadNext, 1000); // 1秒延迟
+              };
+              xhr.send();
+              console.log(`发送XHR请求 (${video.title})`);
+            } else {
+              status.innerText = "所有下载已完成！请查看浏览器的下载管理器。";
+              console.log("所有下载已完成");
+              abortDownloads(activeXHRs);
+              // 隐藏整体进度条
+              setTimeout(() => {
+                overallProgressContainer.style.display = "none";
+                infoDiv.innerText='';
+                console.log("隐藏整体进度条");
+              }, 5000);
+              
+              isDownloading=false;
+              // 恢复下载按钮和复选框
+              downloadButton.disabled = false;
+              downloadButton.innerText = "下载选中视频";
+              downloadButton.style.backgroundColor = "#4CAF50";
+              downloadButton.style.cursor = "pointer";
+              console.log("恢复下载按钮状态");
+              const checkboxes = container.querySelectorAll(".videoCheckbox");
+              checkboxes.forEach((cb) => {
+                cb.disabled=false;
+                const divBox=cb.parentElement;
+                switchClickable(divBox,true);
+              });
+              selectAllCheckbox.disabled=false;
             }
-  
-            // 监听错误
-            xhr.onerror = function () {
-              console.error(`下载失败 (${video.title}): 网络错误`);
-              alert(`下载失败: ${video.title} （网络错误）`);
-  
-              completed++;
-              console.log(
-                `下载错误处理: ${video.title} (${completed}/${selectedVideos.length})`
-              );
-  
-              // 更新整体进度条
-              const progress = (
-                (completed / selectedVideos.length) *
-                100
-              ).toFixed(2);
-              overallProgressBar.style.width = progress + "%";
-              console.log(`整体进度: ${progress}%`);
-  
-              currentDownload++;
-              // 触发下一个下载
-              setTimeout(downloadNext, 1000); // 1秒延迟
-            };
-  
-            console.log(`发送XHR请求 (${video.title})`);
-            xhr.send();
-          } else {
-            status.innerText = "所有下载已完成！请查看浏览器的下载管理器。";
-            console.log("所有下载已完成");
-  
-            // 隐藏整体进度条
-            setTimeout(() => {
-              overallProgressContainer.style.display = "none";
-              infoDiv.innerText='';
-              console.log("隐藏整体进度条");
-            }, 5000);
-            
-            isDownloading=false;
-            // 恢复下载按钮和复选框
-            downloadButton.disabled = false;
-            downloadButton.innerText = "下载选中视频";
-            downloadButton.style.backgroundColor = "#4CAF50";
-            downloadButton.style.cursor = "pointer";
-            console.log("恢复下载按钮状态");
-            const checkboxes = container.querySelectorAll(".videoCheckbox");
-            checkboxes.forEach((cb) => {
-              cb.disabled=false;
-              const divBox=cb.parentElement;
-              switchClickable(divBox,true);
-            });
-            selectAllCheckbox.disabled=false;
           }
+    
+          downloadNext();
         }
-  
-        downloadNext();
       }
       function popup() {
       
@@ -857,6 +872,13 @@ export default () => {
         console.log("恢复下载界面");
       }
      
+      }
+      // 强制终止所有下载
+      function abortDownloads(activeXHRs) {
+        activeXHRs.forEach(xhr => {
+          xhr.abort(); // 终止请求
+        });
+        activeXHRs.length = 0; // 清空队列
       }
     }
     
