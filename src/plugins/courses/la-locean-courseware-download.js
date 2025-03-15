@@ -1,9 +1,19 @@
+// ==UserScript==
+// @name         New Userscript
+// @namespace    http://tampermonkey.net/
+// @version      1742054461239
+// @description  try to take over the world!
+// @author       You
+// @match        https://courses.zju.edu.cn/*
+// @grant        none
+// ==/UserScript==
+
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-  
+
   "use strict";
   __webpack_require__.r(__webpack_exports__);
   /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -12641,17 +12651,23 @@
       var loading = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(true);
       var columns = [{
         title: "课件名称",
-        key: "name"
+        key: "name",
+        width: "60%"
+        // ellipsis: {
+        //   tooltip: true
+        // }
       }, {
         title: "课件大小",
         key: "size",
         render: function render(row) {
           return (0,_utils_parseSize__WEBPACK_IMPORTED_MODULE_2__["default"])(row.size);
         }
-      }, {
-        title: "ID",
-        key: "id"
-      }, {
+      },
+      // {
+      //   title: "ID",
+      //   key: "id",
+      // },
+      {
         title: "下载",
         key: "download",
         render: function render(row) {
