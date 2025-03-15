@@ -1,13 +1,3 @@
-// ==UserScript==
-// @name         New Userscript
-// @namespace    http://tampermonkey.net/
-// @version      1742054461239
-// @description  try to take over the world!
-// @author       You
-// @match        https://courses.zju.edu.cn/*
-// @grant        none
-// ==/UserScript==
-
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
