@@ -12522,7 +12522,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["NButton"], {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [$setup.doShowBtn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["NButton"], {
+    key: 0,
     onClick: $setup.modalOpen,
     type: "primary",
     quaternary: "",
@@ -12537,7 +12538,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return [_cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 下载课件 "))];
     }),
     _: 1 /* STABLE */
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["NModal"], {
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["NModal"], {
     show: $setup.isModalOpen,
     "onUpdate:show": _cache[0] || (_cache[0] = function ($event) {
       return $setup.isModalOpen = $event;
@@ -12636,6 +12637,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     var __expose = _ref.expose;
     __expose();
     var isModalOpen = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
+    var doShowBtn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var loading = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(true);
     var columns = [{
       title: "课件名称",
@@ -12675,25 +12677,26 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         return localStorage.getItem(_CONFIG__WEBPACK_IMPORTED_MODULE_5__.disclaimer_stored_key) === "1";
       };
     var data = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)([]);
-    // const [actId, courseId] =
-
+    fetch("https://courses.zju.edu.cn/api/activities/" + __props.actId + "/upload_references?triggered-by-5dbwat4").then(function (v) {
+      return v.json();
+    }).then(function (r) {
+      data.value = r.references.filter(function (v) {
+        return v.upload && !v.upload.deleted;
+      }).map(function (v) {
+        return {
+          name: v.upload.name,
+          size: v.upload.size,
+          id: v.upload.id,
+          url: "https://courses.zju.edu.cn/api/uploads/" + v.upload.id + "/blob"
+        };
+      });
+      if (data.value.length > 0) {
+        doShowBtn.value = true;
+      }
+      loading.value = false;
+    });
     var modalOpen = function modalOpen() {
       isModalOpen.value = true;
-      fetch("https://courses.zju.edu.cn/api/activities/" + __props.actId + "/upload_references?triggered-by-5dbwat4").then(function (v) {
-        return v.json();
-      }).then(function (r) {
-        data.value = r.references.filter(function (v) {
-          return v.upload && !v.upload.deleted;
-        }).map(function (v) {
-          return {
-            name: v.upload.name,
-            size: v.upload.size,
-            id: v.upload.id,
-            url: "https://courses.zju.edu.cn/api/uploads/" + v.upload.id + "/blob"
-          };
-        });
-        loading.value = false;
-      });
     };
     var NextBinding = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(function () {});
     var downloaderHandling = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)({
@@ -12756,6 +12759,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     }();
     var __returned__ = {
       isModalOpen: isModalOpen,
+      doShowBtn: doShowBtn,
       loading: loading,
       columns: columns,
       show_disclaimer: show_disclaimer,
