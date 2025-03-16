@@ -157,7 +157,14 @@ export default () => {
       const selectAllContainer = document.createElement("div");
       selectAllContainer.style.display = "flex";
       selectAllContainer.style.alignItems = "center";
+      selectAllContainer.style.justifyContent = "space-bewteen";
       selectAllContainer.style.marginBottom = "10px";
+
+      const reminder=document.createElement("span");
+      reminder.classList.add("reminder");
+      reminder.innerText='关闭页面即可停止下载';
+      reminder.style.display='none';
+      reminder.style.marginLeft='5%';
 
       const selectAllCheckbox = document.createElement("input");
       selectAllCheckbox.type = "checkbox";
@@ -169,6 +176,7 @@ export default () => {
 
       selectAllContainer.appendChild(selectAllCheckbox);
       selectAllContainer.appendChild(selectAllLabel);
+      selectAllContainer.appendChild(reminder);
       container.appendChild(selectAllContainer);
 
       // 创建下载按钮
@@ -265,12 +273,15 @@ export default () => {
         divBox.addEventListener('mouseleave',()=>{
           divBox.style.backgroundColor='transparent';
         })
-        if(!video.title.includes('暂无回放')){
+       
           headerDiv.appendChild(divBox);
           listItem.appendChild(headerDiv);
           list.appendChild(listItem);  
-         }
         
+        if(video.title.includes('暂无回放')){
+          divBox.style.maxWidth='95%';
+          checkbox.style.marginRight = "5%";
+        }
         //保存DOM引用用作索引
         video.domRef={
           listItem,
@@ -322,6 +333,7 @@ export default () => {
           console.log("下载按钮被点击");
           isDownloading=true;
           status.innerText = "开始下载...";
+          reminder.style.display='inline';
           selectAllCheckbox.disabled=true;
           console.log("selectAllCheckbox全选复选框已被禁止点击");
           const checkboxes = container.querySelectorAll(".videoCheckbox");
@@ -530,6 +542,7 @@ export default () => {
               downloadButton.innerText = "下载选中视频";
               downloadButton.style.backgroundColor = "#4CAF50";
               downloadButton.style.cursor = "pointer";
+              reminder.style.display='none';
               console.log("恢复下载按钮状态");
               const checkboxes = container.querySelectorAll(".videoCheckbox");
               checkboxes.forEach((cb) => {
