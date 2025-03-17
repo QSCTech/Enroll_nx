@@ -31,7 +31,7 @@ export default () => {
           if (!url.includes('http') || !url.includes('https')) {
             downloadPPT();
           } else {
-            addDownloadButton(url);
+            // addDownloadButton(url);
           }
 
           observer.disconnect();
@@ -104,7 +104,7 @@ export default () => {
         try {
           const url = await getPPTUrl();
           console.log('PPT URL:', url);
-          addDownloadButton(url);
+          // addDownloadButton(url);
         } catch (error) {
           console.error("获取 PPT URL 失败:", error);
         }
