@@ -9,8 +9,7 @@
      "zh_CN": "_locales/zh_CN/messages.json"
   },
   "icons": {
-    "48": "icon.png",
-    "128": "icon.png"
+    "256": "favicon.ico"
   },
   "content_scripts": [
     {
