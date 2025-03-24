@@ -1,0 +1,32 @@
+{
+    "extension_name": {
+      "message": "求是潮"
+    },
+    "extension_description": {
+      "message": "基于Lazuli开发的浙大一体化插件"
+    },
+    "option_page_title": {
+      "message": "扩展选项"
+    },
+    "popup_title": {
+      "message": "求是潮插件"
+    },
+    "notification_title": {
+      "message": "通知"
+    },
+    "notification_message": {
+      "message": "您有新的通知"
+    },
+    "error_message": {
+      "message": "发生错误，请重试"
+    },
+    "success_message": {
+      "message": "操作成功"
+    },
+    "loading_message": {
+      "message": "加载中..."
+    },
+    "settings_saved": {
+      "message": "设置已保存"
+    }
+  }
