@@ -47,7 +47,6 @@
     "notifications",
     "storage",
     "activeTab",
-    "scripting",
     "webRequest",
     "tabs"
   ],
