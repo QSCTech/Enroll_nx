@@ -4,10 +4,6 @@
   "version": "1.2.0",
   "description": "求是潮基于Lazuli开发的浙大一体化插件",
   "author": "QSC",
-  "default_locale": "zh_CN",
-  "_locales": {
-     "zh_CN": "_locales/zh_CN/messages.json"
-  },
   "icons": {
     "256": "favicon.ico"
   },
