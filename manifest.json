@@ -4,12 +4,10 @@
   "version": "1.2.0",
   "description": "求是潮基于Lazuli开发的浙大一体化插件",
   "author": "QSC",
-  "default_locale": "zh_CN",
-  "_locales": {
-     "zh_CN": "_locales/zh_CN/messages.json"
-  },
   "icons": {
-    "256": "favicon.ico"
+    "16": "assets/icon.png",
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
   },
   "content_scripts": [
     {
@@ -58,12 +56,12 @@
     "https://api.cc98.org/*"
   ],
   "action": {
-    "default_icon": "icon.png",
+    "default_icon": "assets/icon.png",
     "default_popup": "html/popup.html"
   },
-"content_security_policy": {
-  "extension_pages": "script-src 'self';object-src 'self'"
-},
+  "content_security_policy": {
+    "extension_pages": "script-src 'self';object-src 'self'"
+  },
   "externally_connectable": {
     "matches": [
       "*://zdbk.zju.edu.cn/*"
