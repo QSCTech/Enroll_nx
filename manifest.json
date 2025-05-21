@@ -45,8 +45,7 @@
     "notifications",
     "storage",
     "activeTab",
-    "webRequest",
-    "tabs"
+    "webRequest"
   ],
   "host_permissions": [
     "https://courses.zju.edu.cn/*", 
