@@ -1,4 +1,5 @@
-# Enroll_nx -浙江大学全能插件
+# Enroll_nx - 浙江大学全能插件
+关于贡献，可参考[贡献指南 CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## 学在浙大功能
 ### 1.下载ppt或pdf
