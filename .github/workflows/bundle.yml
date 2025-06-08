@@ -28,7 +28,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: enroll_nx.build-${{ github.ref_name }}-${{ github.sha }}.zip
+          name: enroll_nx.build-node${{ matrix.node-version }}-${{ github.ref_name }}-${{ github.sha }}.zip
           path: |
             manifest.json
             assets/
