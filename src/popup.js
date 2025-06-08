@@ -1,4 +1,4 @@
-﻿async function inital() {
+﻿async function init() {
   //从chrome storage中获取配置
   let updateTime = await new Promise((resolve, reject) => {
     chrome.storage.local.get("search-last-update", function (result) {
@@ -22,7 +22,7 @@ function handleSetting() {
   chrome.runtime.openOptionsPage();
 }
 
-inital();
+init();
 document.addEventListener("DOMContentLoaded", function () {
   //为id是popup-setting的元素添加点击监听
   document

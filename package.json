@@ -1,21 +1,14 @@
 {
-  "name": "lazuli",
+  "name": "enroll_nx",
   "version": "1.0.0",
-  "description": "![](./assets/lazuli-banner.png)",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "webpack": "^5.97.1"
+    "dev": "rolldown -wc",
+    "build": "rolldown -c"
   },
   "devDependencies": {
-    "webpack-cli": "^6.0.1"
+    "@types/chrome": "^0.0.326",
+    "rolldown": "^1.0.0-beta.13"
   }
 }
