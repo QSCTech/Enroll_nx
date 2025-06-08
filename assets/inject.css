@@ -1,0 +1,22 @@
+.body_tr {
+    /** zdbk已自行支持用背景颜色区分冲突、无法选中等情况 */
+    
+    /* &.tr-conflit {
+        background-color: #ffb2b285 !important;
+        &:hover {
+            background-color: #ffb2b285 !important;
+        }
+    }
+    &.tr-disable {
+        background-color: #c8c9c585 !important;
+        &:hover {
+            background-color: #c8c9c585 !important;
+        }
+    }
+    &.tr-enable {
+        background-color: #b2ffbd57 !important;
+        &:hover {
+            background-color: #b2ffbd57 !important;
+        }
+    } */
+}

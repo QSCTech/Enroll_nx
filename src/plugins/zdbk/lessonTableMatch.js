@@ -78,10 +78,9 @@ export async function lessonTableMatch() {
 
             let matchingElements = [];
 
-
-            const checkInterval = setInterval(() => {
+            const timerId = setInterval(() => {
                 if (matchingElements.length > 0) {
-                    clearInterval(checkInterval); // 停止等待
+                    clearInterval(timerId); // 停止等待
                     for (let element of matchingElements) {
                         // 获取元素的纯文本内容
                         //const text = element.textContent;

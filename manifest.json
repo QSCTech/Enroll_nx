@@ -28,19 +28,19 @@
       ],
       "all_frames": true,
       "js": [
-        "lib/js/jquery.min.js",
-        "js/content-script.js"        
+        "assets/jquery.min.js",
+        "dist/content-script.js"        
       ],
       "css": [
-        "lib/css/inject.css"
+        "assets/inject.css"
       ],
       "run_at": "document_end"
     }
   ],
   "background": {
-    "service_worker": "js/background.js"
+    "service_worker": "dist/background.js"
   },
-  "options_page": "html/options.html",
+  "options_page": "assets/options.html",
   "permissions": [
     "notifications",
     "storage",
@@ -56,7 +56,7 @@
   ],
   "action": {
     "default_icon": "assets/icon.png",
-    "default_popup": "html/popup.html"
+    "default_popup": "assets/popup.html"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self';object-src 'self'"
@@ -69,10 +69,10 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "data/default.json",
+        "assets/*.json",
         "assets/*.jpeg",
-        "assets/*.png",
-        "assets/*.jpg"
+        "assets/*.jpg",
+        "assets/*.png"
       ],
       "matches": [
         "http://zdbk.zju.edu.cn/*",

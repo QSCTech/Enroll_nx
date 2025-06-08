@@ -12,9 +12,8 @@ export default async () => {
   //设定一个全局变量 数据过期时间
   var expireTime = 1000 * 60 * 60 * 24 * 7; //7天
   console.log("选课插件已启动");
-  debugger;
-
-  await inital();
+ 
+  await init();
 
   if (
     [
@@ -180,23 +179,17 @@ const observer = new MutationObserver(function (mutations) {
 const config = { childList: true };
 
 //把上面的函数改为promise
-function updateChromeStorage(localData, localTime) {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.set(
-      {
-        "search-data": localData,
-        "search-last-update": localTime,
-      },
-      function () {
-        console.log("数据已写入插件储存空间");
-        resolve(true);
-      }
-    );
+async function updateChromeStorage(localData, localTime) {
+  await chrome.storage.local.set({
+    "search-data": localData,
+    "search-last-update": localTime,
   });
+  console.log("数据已写入插件储存空间");
+  return true;
 }
 
 //插件初始化函数
-async function inital() {
+async function init() {
   //检查缓存中 isinit 是否为true
   let result = await getLocalData("isinit");
 
@@ -206,9 +199,7 @@ async function inital() {
   }
   //执行初始化逻辑
 
-  //加载json文件至chrome缓存 位置 /data/default.json
-  // 使用fetch加载json文件
-  const response = await fetch(chrome.runtime.getURL("/data/default.json"));
+  const response = await fetch(chrome.runtime.getURL("/assets/chalaoshiData.json"));
   const data = await response.json();
 
   //这里没做错误处理 请求自己本地的json如果还能出错那是真的🐂🍺
@@ -301,4 +292,4 @@ function desktop_notification(title, data, closeTime = 3000, url = "") {
   );
 }
 
-window.onload = lessonTableMatch;
+window.addEventListener("load", lessonTableMatch);
