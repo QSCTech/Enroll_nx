@@ -672,8 +672,6 @@ export default () => {
             border: '1px solid #ddd'
           });
           
-          const showDivCheckbox=document.querySelector('#showDivCheckbox');
-          
           // 复选框逻辑
           const checks = [...document.querySelectorAll('.agree-check')];
           
@@ -692,7 +690,6 @@ export default () => {
             downloadButton.removeEventListener('click',()=>{
                 // 在页面加载时，检查是否需要显示 div
                 chrome.storage.sync.get('showDiv', ({ showDiv }) => {
-                  console.log('showDiv is',showDiv);
                   if (showDiv) {
                     popup();
                   }
@@ -719,22 +716,6 @@ export default () => {
         }
         else{
           console.log('succeed to ban popup');
-        }
-      }
-      function checkboxSwitch(flag){
-        const checkboxes = container.querySelectorAll(".videoCheckbox");
-        if (checkboxes) {
-          if(flag!==1 && flag!==0){
-            console.log('参数错误');
-            return;
-          }
-          else{
-            checkboxes.forEach((cb)=>{
-              cb.disabled=(flag===1) ? false: true;
-            })
-          }
-        } else {
-          console.log('fail to get the checkboxex for downloading');
         }
       }
       function handleDivBoxClick(checkbox){
@@ -768,7 +749,7 @@ export default () => {
         const overlay=document.querySelector('.overlay');
         if(overlay){
           overlay.remove();
-        console.log('remove the overlay');
+          console.log('remove the overlay');
         }
         else{
           console.log('fail to remove overlay');
@@ -787,7 +768,6 @@ export default () => {
         const icon = document.createElement('div');
         icon.classList.add('icon');
         const imgUrl = chrome.runtime.getURL('assets/batch_download.png');
-        console.log(imgUrl);
         icon.style.backgroundImage=`url(${imgUrl})`;
         const text = document.createElement('span');
         text.classList.add('btnText');
@@ -842,13 +822,13 @@ export default () => {
       }
       // 精确测量元素宽度的工具函数
       function measureWidth(element) {
-      const clone = element.cloneNode(true);
-      clone.style.visibility = 'hidden';
-      clone.style.position = 'absolute';
-      document.body.appendChild(clone);
-      const width = clone.offsetWidth;
-      document.body.removeChild(clone);
-      return width;
+        const clone = element.cloneNode(true);
+        clone.style.visibility = 'hidden';
+        clone.style.position = 'absolute';
+        document.body.appendChild(clone);
+        const width = clone.offsetWidth;
+        document.body.removeChild(clone);
+        return width;
       }
       // 状态切换函数
       function toggleState() {
@@ -877,7 +857,6 @@ export default () => {
         container.style.borderRadius = '50%';
         container.style.border = '1px solid transparent';
         container.style.padding='2px';
-        console.log(targetWidth);
         console.log("最小化下载界面");
       }
       else{
@@ -887,6 +866,7 @@ export default () => {
         container.style.border = "1px solid rgba(116,189,242,255)";
         container.style.padding='15px';
         container.style.borderRadius = '0';
+        container.style.width = "auto";
         // 显示所有相关元素
         selectAllContainer.style.display = "flex";
         downloadButton.style.display = "block";

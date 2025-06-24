@@ -30,10 +30,7 @@ export default () => {
 
           if (!url.includes('http') || !url.includes('https')) {
             downloadPPT();
-          } else {
-            // addDownloadButton(url);
-          }
-
+          } 
           observer.disconnect();
         } else {
           console.log('未检测到 PDF Viewer');
@@ -67,14 +64,6 @@ export default () => {
         return base + '?' + newParams.join('&');
       }
     
-      function downloadURL(url) {
-        const aEle = globalDocument.createElement('a');
-        aEle.href = url;
-        globalDocument.body.append(aEle);
-        aEle.click();
-        setTimeout(() => aEle.remove(), 3000);
-        console.log('下载链接点击后已移除');
-      }
 
       async function getPPTUrl() {
         return new Promise((resolve, reject) => {
@@ -104,50 +93,8 @@ export default () => {
         try {
           const url = await getPPTUrl();
           console.log('PPT URL:', url);
-          // addDownloadButton(url);
         } catch (error) {
           console.error("获取 PPT URL 失败:", error);
-        }
-      }
-
-      function addDownloadButton(url) {
-        const header = globalDocument.querySelector('.header.clearfix');
-        if (header) {
-          console.log('内页展示');
-
-          const closeBtn = globalDocument.querySelectorAll('.right.close')[1];
-
-          const btnEle = globalDocument.createElement('button');
-          btnEle.style.position = 'absolute';
-          btnEle.style.top = '14px';
-          btnEle.style.right = '200px';
-          btnEle.id = 'downloadButton';
-
-          btnEle.addEventListener('click', async () => {
-            if (noticeState === 0) {
-              const userAgreed = await noticePop();
-              if (userAgreed) {
-                downloadURL(url);
-              }
-            }else{
-              downloadURL(url);
-            }
-          });
-
-          btnEle.style.border = 'none';
-          btnEle.style.background = 'transparent';
-          btnEle.style.cursor = 'pointer';
-          btnEle.title = '下载完一个文件后请务必刷新页面以继续下载新文件';
-
-          const iEle = globalDocument.createElement('i');
-          iEle.className = 'font font-download';
-          btnEle.appendChild(iEle);
-
-          header.insertBefore(btnEle, closeBtn);
-        } else {
-          if (confirm('Do you want to download this file?')) {
-            downloadURL(url);
-          }
         }
       }
     }

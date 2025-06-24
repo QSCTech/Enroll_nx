@@ -1,5 +1,4 @@
 const btnStyle = "cursor:pointer;text-decoration:none;";
-const lineStyle = "padding:5px 0;";
 
 export const wrap_interactivemeta = document.createElement("div");
 wrap_interactivemeta.style =
@@ -35,6 +34,7 @@ container.style.flexDirection = "column";
 export const container_batch = container;
 
 const header = document.createElement("div");
+
 header.style.display = "flex";
 header.style.justifyContent = "space-between";
 header.style.alignItems = "center";
