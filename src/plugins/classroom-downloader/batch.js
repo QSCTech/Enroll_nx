@@ -1,17 +1,22 @@
 import {
-  container_batch,
-  header_batch,
-  minimizeButton_batch,
-  downloadButton_batch,
-  status_batch,
-  overallProgressContainer_batch,
-  overallProgressBar_batch,
-  list_batch,
-  listItem_batch,
-  headerDiv_batch,
-  progressContainer_batch,
-  progressBar_batch,
-  infoDiv_batch,
+  container,
+  header,
+  title,
+  minimizeButton,
+  selectAllContainer,
+  reminder,
+  selectAllCheckbox,
+  selectAllLabel,
+  downloadButton,
+  status,
+  overallProgressContainer,
+  overallProgressBar,
+  list,
+  listItem,
+  headerDiv,
+  progressContainer,
+  progressBar,
+  infoDiv,
 } from "./element-style";
 export default () => {
   // 获取URL中的参数
@@ -68,8 +73,6 @@ export default () => {
             let title = item.title;
             let videoUrl = null;
             let available = true;
-
-            //if (item.pic) {
             try {
               const contentData = JSON.parse(item.content);
               console.log(`解析第${i + 1}项的content字段成功`);
@@ -89,11 +92,6 @@ export default () => {
               console.error(`解析第${i + 1}项的content字段失败:`, e);
               available = false;
             }
-            //} else {
-            //    available = false;
-            //    console.log(`第${i + 1}项的pic字段为空，标记为暂无回放`);
-            //}
-
             // 如果pic为空或videoUrl未获取到，则标记为暂无回放
             if (!available || !videoUrl) {
               title += "（暂无回放）";
@@ -120,68 +118,24 @@ export default () => {
       .catch((error) => {
         console.log("Error fetching API:", error);
       });
+
     function addDownloadUI(videos) {
       console.log("正在添加批量下载的用户界面");
       let popupEnabled=true;
       let isMinimized = true;
       let isDownloading=false;
-      // 创建容器
-      const container = container_batch;
 
-      // 创建标题和最小化按钮
-      const header = header_batch;
-      header.classList.add('Header');
-
-      const title = document.createElement("div");
-      title.classList.add('Title');
-      title.style.fontWeight = "bold";
-      title.innerText = "批量下载视频";
-      title.style.display='block';
-      title.style.color='black';
-      title.style.textDecoration='none';
-      title.style.borderBottom='none';
-      title.style.padding='0px';
-      header.appendChild(title);
-
-      const minimizeButton = minimizeButton_batch;
-      minimizeButton.classList.add('minimizeButton');
-      
       const eles=initialStylizingButton();
       const icon=eles[0];
       const text=eles[1];
-    
+
+      header.appendChild(title);
       header.appendChild(minimizeButton);
       container.appendChild(header);
-
-      // 创建全选复选框容器
-      const selectAllContainer = document.createElement("div");
-      selectAllContainer.style.display = "flex";
-      selectAllContainer.style.alignItems = "center";
-      selectAllContainer.style.justifyContent = "space-bewteen";
-      selectAllContainer.style.marginBottom = "10px";
-
-      const reminder=document.createElement("span");
-      reminder.classList.add("reminder");
-      reminder.innerText='关闭页面即可停止下载';
-      reminder.style.display='none';
-      reminder.style.marginLeft='5%';
-
-      const selectAllCheckbox = document.createElement("input");
-      selectAllCheckbox.type = "checkbox";
-      selectAllCheckbox.id = "selectAllCheckbox";
-
-      const selectAllLabel = document.createElement("label");
-      selectAllLabel.htmlFor = "selectAllCheckbox";
-      selectAllLabel.innerText = " 全选";
-
       selectAllContainer.appendChild(selectAllCheckbox);
       selectAllContainer.appendChild(selectAllLabel);
       selectAllContainer.appendChild(reminder);
       container.appendChild(selectAllContainer);
-
-      // 创建下载按钮
-      const downloadButton = downloadButton_batch;
-      downloadButton.id='downloadBtn';
       downloadButton.addEventListener("mouseover", (event) => {
         event.stopPropagation();
         if (!downloadButton.disabled) {
@@ -194,39 +148,17 @@ export default () => {
           downloadButton.style.backgroundColor = "rgba(0,71,157,255)";
         }
       });
-
       container.appendChild(downloadButton);
-
-      // 创建状态显示区域
-      const status = status_batch;
       container.appendChild(status);
-
-      // 创建整体进度条
-      const overallProgressContainer = overallProgressContainer_batch;
-      container.appendChild(overallProgressContainer);
-      const overallProgressBar = overallProgressBar_batch;
-      
-
-      // 创建进度条
-      const progressContainer = progressContainer_batch;
-      const progressBar = progressBar_batch;
+      container.appendChild(overallProgressContainer);      
       progressContainer.appendChild(progressBar);
-
-      // 创建速度和时间信息
-      const infoDiv = infoDiv_batch;
       container.appendChild(progressContainer);
       container.appendChild(infoDiv);
-      // 创建列表
-      const list = list_batch;
       container.appendChild(list);
 
       // 添加视频项
-      videos.forEach((video, index) => {
+      videos.forEach((video) => {
         
-        const listItem = listItem_batch;
-
-        const headerDiv = headerDiv_batch;
-
         // 创建 div 盒子
         const divBox = document.createElement('div');
         divBox.classList.add('checkbox-container');  // 为 div 盒子添加类名
@@ -672,6 +604,8 @@ export default () => {
             border: '1px solid #ddd'
           });
           
+          const showDivCheckbox=document.querySelector('#showDivCheckbox');
+          
           // 复选框逻辑
           const checks = [...document.querySelectorAll('.agree-check')];
           
@@ -690,6 +624,7 @@ export default () => {
             downloadButton.removeEventListener('click',()=>{
                 // 在页面加载时，检查是否需要显示 div
                 chrome.storage.sync.get('showDiv', ({ showDiv }) => {
+                  console.log('showDiv is',showDiv);
                   if (showDiv) {
                     popup();
                   }
@@ -718,6 +653,7 @@ export default () => {
           console.log('succeed to ban popup');
         }
       }
+
       function handleDivBoxClick(checkbox){
         checkbox.checked = !checkbox.checked;  // 切换复选框的选中状态
       }
@@ -768,6 +704,7 @@ export default () => {
         const icon = document.createElement('div');
         icon.classList.add('icon');
         const imgUrl = chrome.runtime.getURL('assets/batch_download.png');
+        console.log(imgUrl);
         icon.style.backgroundImage=`url(${imgUrl})`;
         const text = document.createElement('span');
         text.classList.add('btnText');
@@ -822,13 +759,13 @@ export default () => {
       }
       // 精确测量元素宽度的工具函数
       function measureWidth(element) {
-        const clone = element.cloneNode(true);
-        clone.style.visibility = 'hidden';
-        clone.style.position = 'absolute';
-        document.body.appendChild(clone);
-        const width = clone.offsetWidth;
-        document.body.removeChild(clone);
-        return width;
+      const clone = element.cloneNode(true);
+      clone.style.visibility = 'hidden';
+      clone.style.position = 'absolute';
+      document.body.appendChild(clone);
+      const width = clone.offsetWidth;
+      document.body.removeChild(clone);
+      return width;
       }
       // 状态切换函数
       function toggleState() {
@@ -857,6 +794,7 @@ export default () => {
         container.style.borderRadius = '50%';
         container.style.border = '1px solid transparent';
         container.style.padding='2px';
+        console.log(targetWidth);
         console.log("最小化下载界面");
       }
       else{
@@ -866,7 +804,6 @@ export default () => {
         container.style.border = "1px solid rgba(116,189,242,255)";
         container.style.padding='15px';
         container.style.borderRadius = '0';
-        container.style.width = "auto";
         // 显示所有相关元素
         selectAllContainer.style.display = "flex";
         downloadButton.style.display = "block";
