@@ -16,7 +16,8 @@ $(document).ready(async function () {
       "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/",
     ].includes(window.location.href) ||
     //如果是zdbk选课页面 url包含 http://zdbk.zju.edu.cn/jwglxt/xsxk
-    window.location.href.includes("http://zdbk.zju.edu.cn/jwglxt/xsxk")
+    window.location.href.includes("https://zdbk.zju.edu.cn/jwglxt/xsxk") ||
+    window.location.href.includes("http://zdbk.zju.edu.cn/jwglxt/xsxk") 
   ) {
     ZDBK_Main();
   }

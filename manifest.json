@@ -75,6 +75,7 @@
         "assets/*.png"
       ],
       "matches": [
+        "https://zdbk.zju.edu.cn/*",
         "http://zdbk.zju.edu.cn/*",
         "https://chalaoshi.buzz/*",
         "http://chalaoshi-buzz-s.webvpn.zju.edu.cn:8001/*",
