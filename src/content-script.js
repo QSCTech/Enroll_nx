@@ -40,7 +40,7 @@ $(document).ready(async function () {
     console.log("hello world");
     ZhiYun_Index();
   } else if (
-    window.location.href.includes("http://zdbk.zju.edu.cn/jwglxt/xsxjc")
+    window.location.href.includes("https://zdbk.zju.edu.cn/jwglxt/xsxjc")
   ) {
     Book_Display();
   }

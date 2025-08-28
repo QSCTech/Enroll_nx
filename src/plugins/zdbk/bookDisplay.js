@@ -31,7 +31,7 @@ export default async function bookDisplay() {
     targetRows.map(async (row, index) => {
       const data = "xkkh=" + row.id;
       const url =
-        "http://zdbk.zju.edu.cn/jwglxt/xsxjc/xsxjc_cxJcxx.html?time=" +
+        "https://zdbk.zju.edu.cn/jwglxt/xsxjc/xsxjc_cxJcxx.html?time=" +
         Date.now() +
         "&gnmkdm=N253535&su=" +
         su;
@@ -52,6 +52,7 @@ export default async function bookDisplay() {
         const res = await response.text();
         const doc = parser.parseFromString(res, "text/html");
         let text = doc.body.textContent || doc.body.innerText;
+        console.log(text);
         text = text.split(/[,:\t\n]/).filter((part) => part.trim() !== "");
 
         let bookInfo = "";
