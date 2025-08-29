@@ -5,9 +5,11 @@
   "description": "求是潮基于Lazuli开发的浙大一体化插件",
   "author": "QSC",
   "icons": {
-    "16": "assets/icon.png",
-    "48": "assets/icon.png",
-    "128": "assets/icon.png"
+    "16": "assets/icons/icon_16x16.png",
+    "32": "assets/icons/icon_32x32.png",
+    "48": "assets/icons/icon_48x48.png",
+    "128": "assets/icons/icon_128x128.png",
+    "256": "assets/icons/icon_256x256.png"
   },
   "content_scripts": [
     {
