@@ -31,7 +31,7 @@
       "all_frames": true,
       "js": [
         "assets/jquery.min.js",
-        "dist/content-script.js"        
+        "dist/content-script.js"
       ],
       "css": [
         "assets/inject.css"
@@ -50,14 +50,20 @@
     "webRequest"
   ],
   "host_permissions": [
-    "https://courses.zju.edu.cn/*", 
+    "https://courses.zju.edu.cn/*",
     "https://tcmedia.zju.edu.cn/*",
     "http://tcmedia.zju.edu.cn/*",
     "https://www.cc98.org/*",
     "https://api.cc98.org/*"
   ],
   "action": {
-    "default_icon": "assets/icon.png",
+    "default_icon": {
+      "16": "assets/icons/icon_16x16.png",
+      "32": "assets/icons/icon_32x32.png",
+      "48": "assets/icons/icon_48x48.png",
+      "128": "assets/icons/icon_128x128.png",
+      "256": "assets/icons/icon_256x256.png"
+    },
     "default_popup": "assets/popup.html"
   },
   "content_security_policy": {
