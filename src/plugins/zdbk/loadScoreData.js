@@ -77,27 +77,27 @@ export async function loadScoreData(element, time = 0) {
             //如果评分大于8.5 设置为红色
             if (parseFloat(res.rate) > 8.5) {
               scoreHTML +=
-                '<a style="color:red;" href=https://chalaoshi.click/t/' +
+                '<a style="color:red;" href="https://0.e.0.0.1.1.f.1.0.7.4.0.1.0.0.2.ip6.arpa/t/' +
                 res.id +
-                ' target="_blank" >' +
+                '" target="_blank" >' +
                 res.rate +
                 "</a><br>";
             }
             //如果评分小于2 设置为紫色
             else if (parseFloat(res.rate) < 2) {
               scoreHTML +=
-                '<a style="color:#4340ff;" href=https://chalaoshi.click/t/' +
+                '<a style="color:#4340ff;" href="https://0.e.0.0.1.1.f.1.0.7.4.0.1.0.0.2.ip6.arpa/t/' +
                 res.id +
-                ' target="_blank" >' +
+                '" target="_blank" >' +
                 res.rate +
                 "</a><br>";
             }
             // 正常情况黑色
             else {
               scoreHTML +=
-                '<a style="color:black;" href=https://chalaoshi.click/t/' +
+                '<a style="color:black;" href="https://0.e.0.0.1.1.f.1.0.7.4.0.1.0.0.2.ip6.arpa/t/' +
                 res.id +
-                ' target="_blank" >' +
+                '" target="_blank" >' +
                 res.rate +
                 "</a><br>";
             }
