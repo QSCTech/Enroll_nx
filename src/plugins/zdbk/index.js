@@ -22,6 +22,7 @@ export default async () => {
       "http://chalaoshi-buzz-s.webvpn.zju.edu.cn:8001/",
       "http://chalaoshi-click-s.webvpn.zju.edu.cn:8001/",
       "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/",
+      "https://0.e.0.0.1.1.f.1.0.7.4.0.1.0.0.2.ip6.arpa/"
     ].includes(window.location.href)
   ) {
     let config = await loadConfig();
@@ -99,7 +100,7 @@ export default async () => {
           "选课插件提示",
           "评分数据已过期，点击打开查老师页面更新评分",
           20000,
-          "http://chalaoshi.click/"
+          "https://0.e.0.0.1.1.f.1.0.7.4.0.1.0.0.2.ip6.arpa"
         );
         //此处暂时不返回 避免影响后续代码执行
         //全局变量 存一个needUpdate 用于判断是否需要更新数据

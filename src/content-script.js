@@ -14,6 +14,7 @@ $(document).ready(async function () {
       "http://chalaoshi-buzz-s.webvpn.zju.edu.cn:8001/",
       "http://chalaoshi-click-s.webvpn.zju.edu.cn:8001/",
       "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/",
+      "https://0.e.0.0.1.1.f.1.0.7.4.0.1.0.0.2.ip6.arpa/"
     ].includes(window.location.href) ||
     //如果是zdbk选课页面 url包含 http://zdbk.zju.edu.cn/jwglxt/xsxk
     window.location.href.includes("https://zdbk.zju.edu.cn/jwglxt/xsxk") ||
